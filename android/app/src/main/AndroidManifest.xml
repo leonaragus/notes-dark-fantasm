@@ -1,0 +1,80 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.ghost_notes_digital_twin">
+
+    <!-- PERMISOS BÁSICOS -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    
+    <!-- CÁMARA Y VIDEO (Paso Cero y Escaneo 360) -->
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-feature android:name="android.hardware.camera" android:required="true" />
+    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
+    
+    <!-- AUDIO (Opcional, pero recomendado para video_player y grabación) -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
+
+    <!-- WI-FI Y UBICACIÓN (Necesarios para el servicio de señales y sincronización) -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <!-- Para Android 13+ (Búsqueda de dispositivos cercanos sin ubicación) -->
+    <uses-permission android:name="android.permission.NEARBY_WIFI_DEVICES" 
+                     android:usesPermissionFlags="neverForLocation" />
+
+    <!-- SENSORES (Giroscopio y Acelerómetro para sincronización 3D) -->
+    <uses-permission android:name="android.permission.HIGH_SAMPLING_RATE_SENSORS" />
+    <uses-feature android:name="android.hardware.sensor.gyroscope" android:required="true" />
+    <uses-feature android:name="android.hardware.sensor.accelerometer" android:required="true" />
+
+    <!-- ALMACENAMIENTO (Guardar capturas y caché de modelos) -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+
+    <!-- OTROS (Vibración, Wake Lock para grabaciones largas) -->
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+
+    <!-- COMPATIBILIDAD CON ANDROID 11+ (Consultar otras apps/servicios si es necesario) -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="https" />
+        </intent>
+    </queries>
+
+   <application
+        android:label="Ghost Notes Digital Twin"
+        android:name="${applicationName}"
+        android:icon="@mipmap/ic_launcher"
+        android:requestLegacyExternalStorage="true"
+        android:usesCleartextTraffic="true">
+        
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:theme="@style/LaunchTheme"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+            android:hardwareAccelerated="true"
+            android:windowSoftInputMode="adjustResize">
+            
+            <meta-data
+              android:name="io.flutter.embedding.android.NormalTheme"
+              android:resource="@style/NormalTheme"
+              />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        
+        <meta-data
+            android:name="flutterEmbedding"
+            android:value="2" />
+    </application>
+</manifest>

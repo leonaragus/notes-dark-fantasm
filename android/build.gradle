@@ -1,0 +1,29 @@
+plugins {
+    id "com.android.application" version "8.4.0" apply false
+    id "org.jetbrains.kotlin.android" version "1.9.20" apply false
+    id "dev.flutter.flutter-gradle-plugin" version "1.0.0" apply false
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+        kotlinOptions {
+            jvmTarget = "17"
+        }
+    }
+}
+
+rootProject.buildDir = '../build'
+subprojects {
+    project.buildDir = "${rootProject.buildDir}/${project.name}"
+}
+subprojects {
+    project.evaluationDependsOn(':app')
+}
+
+tasks.register("clean", Delete) {
+    delete rootProject.buildDir
+}

@@ -1,0 +1,54 @@
+name: ghost_notes_digital_twin
+description: A new Flutter project for Ghost Notes Digital Twin.
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+  uuid: ^4.3.3
+  shared_preferences: ^2.2.2
+  camera: ^0.10.5+9
+  path_provider: ^2.1.2
+  path: ^1.9.0
+  wifi_scan: ^0.4.0+1
+  flutter_cube: ^0.1.1
+  vector_math: ^2.1.4
+  sensors_plus: ^5.0.1
+  video_player: ^2.8.2
+  share_plus: ^7.2.2
+  in_app_purchase: ^3.1.11
+  google_mobile_ads: ^3.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+  flutter_launcher_icons: ^0.13.1
+  flutter_native_splash: ^2.4.0
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/app_icon.png"
+
+flutter_native_splash:
+  color: "#000000"
+  image: "assets/images/splash_logo.png"
+  android: true
+  ios: true
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/models/
+    - assets/images/furniture/cocina/
+    - assets/images/furniture/living/
+    - assets/images/furniture/dormitorio/
+    - assets/images/furniture/baño/
+    - assets/images/furniture/patio/
+    - assets/images/furniture/pisos/
