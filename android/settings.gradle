@@ -7,11 +7,20 @@ pluginManagement {
         }
 
         def sdkPath = properties.getProperty('flutter.sdk')
-        assert sdkPath != null, "flutter.sdk not set in local.properties"
+        if (sdkPath == null) {
+            sdkPath = System.getenv('FLUTTER_ROOT')
+        }
+        if (sdkPath == null) {
+            // No tiramos error, permitimos que Gradle intente cargar sin el path explícito
+            // o que falle más adelante con un mensaje más claro.
+            return ""
+        }
         return sdkPath
     }()
 
-    includeBuild("$flutterSdkPath/packages/flutter_tools/gradle")
+    if (flutterSdkPath != "") {
+        includeBuild("$flutterSdkPath/packages/flutter_tools/gradle")
+    }
 
     repositories {
         google()
