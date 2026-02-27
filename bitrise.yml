@@ -1,0 +1,29 @@
+format_version: "11"
+default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
+
+project_type: flutter
+
+workflows:
+  primary:
+    steps:
+    - activate-ssh-key@4:
+        run_if: '{{setup_ssh_key}}'
+    - git-clone@6: {}
+    - flutter-installer@0:
+        inputs:
+        - is_update: "false"
+    - flutter-analyze@0:
+        inputs:
+        - project_location: "."
+    - flutter-build@0:
+        inputs:
+        - project_location: "."
+        - platform: android
+        - build_mode: debug
+    - deploy-to-bitrise-io@2: {}
+
+app:
+  envs:
+  - opts:
+      is_expand: false
+    BITRISE_FLUTTER_PROJECT_LOCATION: "."
