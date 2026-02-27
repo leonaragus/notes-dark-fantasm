@@ -10,7 +10,6 @@ import '../widgets/scene_3d_view.dart';
 
 import '../services/wifi_signal_service.dart';
 import 'package:flutter_cube/flutter_cube.dart' as cube;
-import '../zapp_demo.dart';
 import '../models/subscription_model.dart';
 import 'subscription_screen.dart';
 
@@ -51,47 +50,10 @@ class _HomeGalleryScreenState extends State<HomeGalleryScreen> {
   Future<void> _loadSharedRooms() async {
     if (_currentSSID == null) return;
     
-    // Simulación de fetch de red familiar
-    final sharedData = await ZappDemo.getSharedRooms(_currentSSID!);
-    if (mounted) {
-      setState(() {
-        _sharedRooms = sharedData.map((data) {
-          return Room(
-            id: data['room_id'],
-            floorLevel: data['floor'],
-            type: RoomType.values[data['type']],
-            assets: (data['assets'] as List).map((a) {
-              return FurnitureAsset(
-                id: a['id'],
-                name: a['name'],
-                position: cube.Vector3(0,0,0), // Placeholder para vista de galería
-                zIndex: 0,
-                dimensions: const AssetDimension(width: 1, depth: 1, height: 1),
-                icon: Icons.chair,
-                color: Colors.white,
-                isAnchored: a['is_anchored'],
-                notes: (a['notes'] as List).map((n) => GhostNote(
-                  id: 'n_${DateTime.now().millisecondsSinceEpoch}_${a['id']}',
-                  furnitureId: a['id'],
-                  content: 'CONTENIDO BLOQUEADO',
-                  authorName: n['author'],
-                  authorAvatar: n['owner_avatar'] ?? 'person',
-                  theme: NoteTheme.PRO,
-                  mood: n['mood'] == 'joy' ? NoteMood.joy : NoteMood.fear,
-                  fontSize: 14,
-                  neonColor: n['mood'] == 'joy' ? CyberTheme.neonGreen : Colors.redAccent,
-                  createdAt: DateTime.now(),
-                )).toList(),
-              );
-            }).toList(),
-            ownerName: data['owner_name'],
-            ownerAvatar: data['owner_avatar'],
-            isShared: true,
-            targetSSID: _currentSSID,
-          );
-        }).toList();
-      });
-    }
+    // Simulación de fetch de red familiar - Deshabilitado por ahora
+    setState(() {
+      _sharedRooms = [];
+    });
   }
 
   Future<void> _loadData() async {

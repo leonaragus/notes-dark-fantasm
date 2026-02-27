@@ -1,0 +1,5 @@
+* [33m9a4f5a3[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m Cleanup: Remove corrupted shell integration script
+* [33m8c8ad59[m Fix: Add trigger_map to bitrise.yml to auto-start build on push
+* [33m76365f1[m Fix: Remove 'Orbe' references, fix 'baño' in python script, and ensure all models are consistent
+* [33mdce7ff6[m Fix: Replace 'baño' with 'bano' in all files and update pubspec assets
+* [33mf63ff27[m Fix compilation errors in editor_screen, assets_library, and other files
