@@ -9,15 +9,15 @@ workflows:
     - activate-ssh-key@4:
         run_if: '{{setup_ssh_key}}'
     - git-clone@6: {}
+    - flutter-installer@0:
+        inputs:
+        - is_update: "false"
     - script@1:
-        title: "Check and Set environment"
+        title: "Setup and Build"
         inputs:
         - content: |-
             #!/bin/bash
             set -ex
-            # Mostrar herramientas instaladas
-            echo "Checking environment..."
-            env | sort
             
             # Forzar Java 17
             if [ -d "/usr/lib/jvm/java-17-openjdk-amd64" ]; then
@@ -25,33 +25,30 @@ workflows:
             elif [ ! -z "$JAVA_HOME_17_X64" ]; then
                 export JAVA_HOME="$JAVA_HOME_17_X64"
             fi
-            
             export PATH=$JAVA_HOME/bin:$PATH
             java -version
             
-            # Debug Flutter
-            flutter --version
-    - flutter-installer@0:
-        inputs:
-        - is_update: "false"
-    - script@1:
-        title: "Fix permissions and build"
-        inputs:
-        - content: |-
-            #!/bin/bash
-            set -ex
-            
-            # Forzar permisos de ejecución en gradlew ANTES de cualquier comando
+            # Forzar permisos de ejecución en gradlew
             find . -name "gradlew" -exec chmod +x {} \;
             
-            # Limpiar y forzar dependencias
+            # Crear local.properties dinámicamente para que Gradle no falle
+            # Esto es vital para que settings.gradle y build.gradle no exploten
+            echo "sdk.dir=$ANDROID_HOME" > android/local.properties
+            echo "flutter.sdk=$FLUTTER_ROOT" >> android/local.properties
+            echo "flutter.versionCode=1" >> android/local.properties
+            echo "flutter.versionName=1.0" >> android/local.properties
+            
+            # Mostrar para debug
+            cat android/local.properties
+            
+            # Limpiar y build con verbose
             flutter clean
             flutter pub get
             
-            # Aceptar licencias manualmente
+            # Aceptar licencias manualmente por las dudas
             yes | sdkmanager --licenses || true
             
-            # Build manual para ver errores reales en el log de Bitrise
+            # BUILD FINAL
             flutter build apk --debug --verbose --no-pub
     - deploy-to-bitrise-io@2: {}
 
