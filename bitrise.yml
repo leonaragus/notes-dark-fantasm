@@ -9,6 +9,18 @@ workflows:
     - activate-ssh-key@4:
         run_if: '{{setup_ssh_key}}'
     - git-clone@6: {}
+    - script@1:
+        title: "Check and Set environment"
+        inputs:
+        - content: |-
+            #!/bin/bash
+            set -ex
+            env | sort
+            # Forzar Java 17
+            jenv global 17 || true
+            export JAVA_HOME=$JAVA_HOME_17_X64
+            export PATH=$JAVA_HOME/bin:$PATH
+            java -version
     - flutter-installer@0:
         inputs:
         - is_update: "false"
@@ -18,16 +30,15 @@ workflows:
         - content: |-
             #!/bin/bash
             set -ex
-            # Configurar Java 17 explícitamente si Bitrise usa otra versión
-            export JAVA_HOME=$JAVA_HOME_17_X64
-            export PATH=$JAVA_HOME/bin:$PATH
-            
             # Limpiar y forzar dependencias
             flutter clean
             flutter pub get
             
-            # Aceptar licencias manualmente por si el step de build falla
+            # Aceptar licencias manualmente
             yes | sdkmanager --licenses || true
+            
+            # Forzar permisos de ejecución en el wrapper de gradle
+            chmod +x android/gradlew
     - flutter-build@0:
         inputs:
         - project_location: "."
