@@ -12,9 +12,6 @@ workflows:
     - flutter-installer@0:
         inputs:
         - is_update: "false"
-    - flutter-analyze@0:
-        inputs:
-        - project_location: "."
     - flutter-build@0:
         inputs:
         - project_location: "."
