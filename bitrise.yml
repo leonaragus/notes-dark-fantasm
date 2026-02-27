@@ -15,21 +15,35 @@ workflows:
         - content: |-
             #!/bin/bash
             set -ex
+            # Mostrar herramientas instaladas
+            echo "Checking environment..."
             env | sort
+            
             # Forzar Java 17
-            jenv global 17 || true
-            export JAVA_HOME=$JAVA_HOME_17_X64
+            if [ -d "/usr/lib/jvm/java-17-openjdk-amd64" ]; then
+                export JAVA_HOME="/usr/lib/jvm/java-17-openjdk-amd64"
+            elif [ ! -z "$JAVA_HOME_17_X64" ]; then
+                export JAVA_HOME="$JAVA_HOME_17_X64"
+            fi
+            
             export PATH=$JAVA_HOME/bin:$PATH
             java -version
+            
+            # Debug Flutter
+            flutter --version
     - flutter-installer@0:
         inputs:
         - is_update: "false"
     - script@1:
-        title: "Fix for filePermissions error"
+        title: "Fix permissions and build"
         inputs:
         - content: |-
             #!/bin/bash
             set -ex
+            
+            # Forzar permisos de ejecución en gradlew ANTES de cualquier comando
+            find . -name "gradlew" -exec chmod +x {} \;
+            
             # Limpiar y forzar dependencias
             flutter clean
             flutter pub get
@@ -37,14 +51,10 @@ workflows:
             # Aceptar licencias manualmente
             yes | sdkmanager --licenses || true
             
-            # Forzar permisos de ejecución en el wrapper de gradle
-            chmod +x android/gradlew
-    - flutter-build@0:
-        inputs:
-        - project_location: "."
-        - platform: android
-        - build_mode: debug
+            # Build manual para ver errores reales en el log de Bitrise
+            flutter build apk --debug --verbose --no-pub
     - deploy-to-bitrise-io@2: {}
+
 
 app:
   envs:
