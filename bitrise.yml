@@ -12,6 +12,22 @@ workflows:
     - flutter-installer@0:
         inputs:
         - is_update: "false"
+    - script@1:
+        title: "Fix for filePermissions error"
+        inputs:
+        - content: |-
+            #!/bin/bash
+            set -ex
+            # Configurar Java 17 explícitamente si Bitrise usa otra versión
+            export JAVA_HOME=$JAVA_HOME_17_X64
+            export PATH=$JAVA_HOME/bin:$PATH
+            
+            # Limpiar y forzar dependencias
+            flutter clean
+            flutter pub get
+            
+            # Aceptar licencias manualmente por si el step de build falla
+            yes | sdkmanager --licenses || true
     - flutter-build@0:
         inputs:
         - project_location: "."
