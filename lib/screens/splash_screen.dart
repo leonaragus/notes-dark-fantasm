@@ -134,7 +134,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
       opacity: Tween<double>(begin: 0.0, end: 1.0).animate(_logoController),
       child: ScaleTransition(
         scale: Tween<double>(begin: 0.8, end: 1.0).animate(
-          CurvedAnimation(parent: _logoController, curve: Curves.outBack)
+          CurvedAnimation(parent: _logoController, curve: Curves.backOut)
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,

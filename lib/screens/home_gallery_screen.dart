@@ -9,6 +9,7 @@ import 'profile_registration_screen.dart';
 import '../widgets/scene_3d_view.dart';
 
 import '../services/wifi_signal_service.dart';
+import 'package:flutter_cube/flutter_cube.dart' as cube;
 import '../zapp_demo.dart';
 import '../models/subscription_model.dart';
 import 'subscription_screen.dart';
@@ -448,6 +449,7 @@ class _HomeGalleryScreenState extends State<HomeGalleryScreen> {
                           child: IgnorePointer(
                             child: Scene3DView(
                               assets: room.assets,
+                              onAssetSelected: (_) {}, // No selección en galería
                               isInspectionMode: false,
                             ),
                           ),

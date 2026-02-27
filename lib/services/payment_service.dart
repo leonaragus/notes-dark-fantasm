@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:in_app_purchase/in_app_purchase.dart';
-import 'subscription_model.dart';
+import '../models/subscription_model.dart';
 
 class PaymentService {
   static final PaymentService _instance = PaymentService._internal();

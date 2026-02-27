@@ -25,10 +25,10 @@ class AppAssets {
     '$_base/dormitorio/computer.png',
   ];
 
-  static List<String> baño = [
-    '$_base/baño/toilet.png',
-    '$_base/baño/shower.png',
-    '$_base/baño/bathtub.png',
+  static List<String> bano = [
+    '$_base/bano/toilet.png',
+    '$_base/bano/shower.png',
+    '$_base/bano/bathtub.png',
   ];
 
   static List<String> patio = [
