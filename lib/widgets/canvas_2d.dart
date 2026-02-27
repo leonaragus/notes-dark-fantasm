@@ -53,7 +53,7 @@ class _Canvas2DState extends State<Canvas2D> {
           Positioned(
             left: -10,
             top: -10,
-            child: Icon(Icons.door_front_door, color: CyberTheme.neonGreen.withValues(alpha: 0.5), size: 20),
+            child: Icon(Icons.door_front_door, color: CyberTheme.neonGreen.withOpacity(0.5), size: 20),
           ),
         ],
       ),
@@ -94,14 +94,14 @@ class _Canvas2DState extends State<Canvas2D> {
     final d = (isRotated ? asset.dimensions.width : asset.dimensions.depth) * metersToPixels;
     
     // Color de borde y sombra dinámico según sincronización
-    final borderColor = asset.isSynced ? CyberTheme.neonCyan : asset.color.withValues(alpha: 0.8);
-    final shadowColor = asset.isSynced ? CyberTheme.neonCyan.withValues(alpha: 0.5) : asset.color.withValues(alpha: 0.3);
+    final borderColor = asset.isSynced ? CyberTheme.neonCyan : asset.color.withOpacity(0.8);
+    final shadowColor = asset.isSynced ? CyberTheme.neonCyan.withOpacity(0.5) : asset.color.withOpacity(0.3);
 
     return Container(
       width: w,
       height: d,
       decoration: BoxDecoration(
-        color: asset.color.withValues(alpha: 0.2),
+        color: asset.color.withOpacity(0.2),
         borderRadius: BorderRadius.circular(2),
         border: Border.all(color: borderColor, width: 1.5),
         boxShadow: [
@@ -161,7 +161,7 @@ class GridPainter extends CustomPainter {
     }
 
     final axisPaint = Paint()
-      ..color = CyberTheme.neonGreen.withValues(alpha: 0.2)
+      ..color = CyberTheme.neonGreen.withOpacity(0.2)
       ..strokeWidth = 1.5;
     canvas.drawLine(Offset(0, 0), Offset(size.width, 0), axisPaint);
     canvas.drawLine(Offset(0, 0), Offset(0, size.height), axisPaint);
@@ -170,3 +170,4 @@ class GridPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
+

@@ -220,7 +220,7 @@ class _Scene3DViewState extends State<Scene3DView> with SingleTickerProviderStat
                 icon: const Icon(Icons.note_add, color: Colors.black),
                 label: Text('Añadir Nota a ${_selectedAsset!.name}', 
                   style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-                backgroundColor: Colors.cyanAccent.withValues(alpha: 0.9),
+                backgroundColor: Colors.cyanAccent.withOpacity(0.9),
               ),
             ),
           ),
@@ -228,3 +228,4 @@ class _Scene3DViewState extends State<Scene3DView> with SingleTickerProviderStat
     );
   }
 }
+

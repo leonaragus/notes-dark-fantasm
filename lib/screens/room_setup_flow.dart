@@ -74,7 +74,7 @@ class _RoomSelectionScreenState extends State<RoomSelectionScreen> {
               Text(
                 'Seleccioná un espacio para comenzar',
                 style: TextStyle(
-                  color: Colors.cyanAccent.withValues(alpha: 0.7),
+                  color: Colors.cyanAccent.withOpacity(0.7),
                   fontSize: 16,
                 ),
               ),
@@ -99,7 +99,7 @@ class _RoomSelectionScreenState extends State<RoomSelectionScreen> {
                             color: const Color(0xFF1A1A1A),
                             borderRadius: BorderRadius.circular(24),
                             border: Border.all(
-                              color: Colors.white.withValues(alpha: 0.05),
+                              color: Colors.white.withOpacity(0.05),
                               width: 1,
                             ),
                           ),
@@ -149,9 +149,9 @@ class ShapeSelectorPopUp extends StatelessWidget {
           width: MediaQuery.of(context).size.width * 0.85,
           padding: const EdgeInsets.all(24),
           decoration: BoxDecoration(
-            color: const Color(0xFF1A1A1A).withValues(alpha: 0.9),
+            color: const Color(0xFF1A1A1A).withOpacity(0.9),
             borderRadius: BorderRadius.circular(32),
-            border: Border.all(color: Colors.cyanAccent.withValues(alpha: 0.2)),
+            border: Border.all(color: Colors.cyanAccent.withOpacity(0.2)),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -224,7 +224,7 @@ class _ShapeOption extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.05),
+          color: Colors.white.withOpacity(0.05),
           borderRadius: BorderRadius.circular(20),
         ),
         child: Row(
@@ -293,9 +293,9 @@ class SizeSelectorPopUp extends StatelessWidget {
           maxHeight: MediaQuery.of(context).size.height * 0.7,
           padding: const EdgeInsets.all(24),
           decoration: BoxDecoration(
-            color: const Color(0xFF1A1A1A).withValues(alpha: 0.9),
+            color: const Color(0xFF1A1A1A).withOpacity(0.9),
             borderRadius: BorderRadius.circular(32),
-            border: Border.all(color: Colors.cyanAccent.withValues(alpha: 0.2)),
+            border: Border.all(color: Colors.cyanAccent.withOpacity(0.2)),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -341,7 +341,7 @@ class SizeSelectorPopUp extends StatelessWidget {
                         child: Container(
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.05),
+                            color: Colors.white.withOpacity(0.05),
                             borderRadius: BorderRadius.circular(16),
                           ),
                           child: Center(
@@ -575,7 +575,7 @@ class _RoomPreview3DScreenState extends State<RoomPreview3DScreen> {
                       },
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.05),
+                          color: Colors.white.withOpacity(0.05),
                           borderRadius: BorderRadius.circular(16),
                         ),
                         child: Column(
@@ -604,7 +604,7 @@ class _RoomPreview3DScreenState extends State<RoomPreview3DScreen> {
                 child: ElevatedButton(
                   onPressed: () => Navigator.pop(context),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.cyanAccent.withValues(alpha: 0.1),
+                    backgroundColor: Colors.cyanAccent.withOpacity(0.1),
                     side: const BorderSide(color: Colors.cyanAccent),
                   ),
                   child: const Text('CANCELAR', style: TextStyle(color: Colors.cyanAccent)),
@@ -798,9 +798,9 @@ class _RoomPreview3DScreenState extends State<RoomPreview3DScreen> {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: const Color(0xFF1A1A1A).withValues(alpha: 0.9),
+              color: const Color(0xFF1A1A1A).withOpacity(0.9),
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: Colors.cyanAccent.withValues(alpha: 0.3)),
+              border: Border.all(color: Colors.cyanAccent.withOpacity(0.3)),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -816,7 +816,7 @@ class _RoomPreview3DScreenState extends State<RoomPreview3DScreen> {
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                     decoration: BoxDecoration(
-                      color: isSelected ? Colors.cyanAccent.withValues(alpha: 0.2) : Colors.transparent,
+                      color: isSelected ? Colors.cyanAccent.withOpacity(0.2) : Colors.transparent,
                       borderRadius: BorderRadius.circular(15),
                       border: Border.all(color: isSelected ? Colors.cyanAccent : Colors.white10),
                     ),
@@ -871,12 +871,13 @@ class _CircleButton extends StatelessWidget {
         width: 50,
         height: 50,
         decoration: BoxDecoration(
-          color: Colors.black.withValues(alpha: 0.5),
-          shape: BoxShape.circle,
-          border: Border.all(color: color.withValues(alpha: 0.5)),
-        ),
+            color: Colors.black.withOpacity(0.5),
+            shape: BoxShape.circle,
+            border: Border.all(color: color.withOpacity(0.5)),
+          ),
         child: Icon(icon, color: color, size: 24),
       ),
     );
   }
 }
+

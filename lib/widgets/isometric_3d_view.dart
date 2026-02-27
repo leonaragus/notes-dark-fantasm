@@ -173,7 +173,7 @@ class IsometricMaquettePainter extends CustomPainter {
     
     // Dibujar patrón de rejilla/textura suave
     final gridPaint = Paint()
-      ..color = Colors.black.withValues(alpha: 0.05)
+      ..color = Colors.black.withOpacity(0.05)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.0;
     
@@ -258,7 +258,7 @@ class IsometricMaquettePainter extends CustomPainter {
         destH
       );
 
-      canvas.saveLayer(destRect, Paint()..color = Colors.white.withValues(alpha: opacity));
+      canvas.saveLayer(destRect, Paint()..color = Colors.white.withOpacity(opacity));
       canvas.drawImageRect(
         img,
         Rect.fromLTWH(0, 0, img.width.toDouble(), img.height.toDouble()),
@@ -272,7 +272,7 @@ class IsometricMaquettePainter extends CustomPainter {
         canvas.drawRect(
           destRect.inflate(4),
           Paint()
-            ..color = asset.color.withValues(alpha: 0.2 * proximity)
+            ..color = asset.color.withOpacity(0.2 * proximity)
             ..style = PaintingStyle.stroke
             ..strokeWidth = 2
             ..maskFilter = const MaskFilter.blur(BlurStyle.outer, 8)
@@ -280,7 +280,7 @@ class IsometricMaquettePainter extends CustomPainter {
       }
     } else {
       // Fallback a cubo si no hay sprite cargado
-      final paint = Paint()..color = asset.color.withValues(alpha: opacity);
+      final paint = Paint()..color = asset.color.withOpacity(opacity);
       _drawFallbackCube(canvas, basePos, asset, paint, scale);
     }
   }
@@ -305,3 +305,4 @@ class IsometricMaquettePainter extends CustomPainter {
     oldDelegate.expansionValue != expansionValue ||
     oldDelegate.sprites.length != sprites.length;
 }
+

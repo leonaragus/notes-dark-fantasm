@@ -565,7 +565,7 @@ class _NoteViewerScreenState extends State<NoteViewerScreen> with TickerProvider
     showGeneralDialog(
       context: context,
       barrierDismissible: false,
-      barrierColor: Colors.white.withValues(alpha: 0.8), // Destello blanco intenso
+      barrierColor: Colors.white.withOpacity(0.8), // Destello blanco intenso
       transitionDuration: const Duration(milliseconds: 100),
       pageBuilder: (_, __, ___) => const SizedBox.shrink(),
     );
@@ -577,7 +577,7 @@ class _NoteViewerScreenState extends State<NoteViewerScreen> with TickerProvider
       showGeneralDialog(
         context: context,
         barrierDismissible: false,
-        barrierColor: Colors.cyanAccent.withValues(alpha: 0.3),
+        barrierColor: Colors.cyanAccent.withOpacity(0.3),
         transitionDuration: const Duration(milliseconds: 400),
         pageBuilder: (_, __, ___) => const SizedBox.shrink(),
       );
@@ -610,7 +610,7 @@ class _NoteViewerScreenState extends State<NoteViewerScreen> with TickerProvider
           Positioned.fill(
             child: BackdropFilter(
               filter: ui.ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-              child: Container(color: Colors.black.withValues(alpha: 0.4)),
+              child: Container(color: Colors.black.withOpacity(0.4)),
             ),
           ),
           Center(
@@ -652,7 +652,7 @@ class _NoteViewerScreenState extends State<NoteViewerScreen> with TickerProvider
                         color: Colors.cyanAccent,
                         borderRadius: BorderRadius.circular(2),
                         boxShadow: [
-                          BoxShadow(color: Colors.cyanAccent.withValues(alpha: 0.5), blurRadius: 10),
+                          BoxShadow(color: Colors.cyanAccent.withOpacity(0.5), blurRadius: 10),
                         ],
                       ),
                     ),
@@ -681,7 +681,7 @@ class _NoteViewerScreenState extends State<NoteViewerScreen> with TickerProvider
                   border: Border.all(color: CyberTheme.neonGreen, width: 2),
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: [
-                    BoxShadow(color: CyberTheme.neonGreen.withValues(alpha: 0.3), blurRadius: 8),
+                    BoxShadow(color: CyberTheme.neonGreen.withOpacity(0.3), blurRadius: 8),
                   ],
                 ),
                 child: ClipRRect(
@@ -961,7 +961,7 @@ class _NoteViewerScreenState extends State<NoteViewerScreen> with TickerProvider
                   value: _currentOffset,
                   min: -45,
                   max: 45,
-                  activeColor: Colors.cyanAccent.withValues(alpha: 0.5),
+                  activeColor: Colors.cyanAccent.withOpacity(0.5),
                   inactiveColor: Colors.white24,
                   onChanged: (val) {
                     setState(() {
@@ -998,7 +998,7 @@ class _StaticEnergyPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = color.withValues(alpha: 0.2)
+      ..color = color.withOpacity(0.2)
       ..style = PaintingStyle.fill;
 
     final time = DateTime.now().millisecondsSinceEpoch / 500;
@@ -1011,7 +1011,7 @@ class _StaticEnergyPainter extends CustomPainter {
       
       // Mini destellos
       if (math.Random().nextDouble() > 0.95) {
-        canvas.drawCircle(Offset(x, y), p.size, Paint()..color = Colors.white.withValues(alpha: 0.4));
+        canvas.drawCircle(Offset(x, y), p.size, Paint()..color = Colors.white.withOpacity(0.4));
       }
     }
   }
@@ -1048,7 +1048,7 @@ class _AtmospherePainter extends CustomPainter {
       final y = (p.baseY + ui.cos(time * p.speedY) * 0.1) * size.height;
       
       // Color gélido/nieve o cálido/otoño dependiendo del tiempo
-      paint.color = Colors.white.withValues(alpha: p.opacity * 0.3);
+      paint.color = Colors.white.withOpacity(p.opacity * 0.3);
       canvas.drawCircle(Offset(x, y), p.size, paint);
     }
   }
@@ -1094,7 +1094,7 @@ class LeaderLinePainter extends CustomPainter {
     final end = Offset(size.width / 2, size.height * 0.4);
 
     final paint = Paint()
-      ..color = neonColor.withValues(alpha: 0.6)
+      ..color = neonColor.withOpacity(0.6)
       ..strokeWidth = 2
       ..style = PaintingStyle.stroke
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 3);
@@ -1114,7 +1114,7 @@ class LeaderLinePainter extends CustomPainter {
     final metric = ui.PathMetrics(path, false).first;
     final pos = metric.getTangentForOffset(metric.length * progress)!.position;
     
-    canvas.drawCircle(pos, 4, Paint()..color = Colors.white.withValues(alpha: 0.8)..maskFilter = const MaskFilter.blur(BlurStyle.normal, 2));
+    canvas.drawCircle(pos, 4, Paint()..color = Colors.white.withOpacity(0.8)..maskFilter = const MaskFilter.blur(BlurStyle.normal, 2));
   }
 
   @override
@@ -1189,14 +1189,14 @@ class __GhostNoteDisplayState extends State<_GhostNoteDisplay> with SingleTicker
         filter: ui.ImageFilter.blur(sigmaX: 15, sigmaY: 15),
         child: Container(
           decoration: BoxDecoration(
-            color: isActive ? Colors.black.withValues(alpha: 0.6) : Colors.black.withValues(alpha: 0.3),
+            color: isActive ? Colors.black.withOpacity(0.6) : Colors.black.withOpacity(0.3),
             borderRadius: BorderRadius.circular(25),
             border: Border.all(
-              color: isActive ? agedColor.withValues(alpha: 0.5) : Colors.white10, 
+              color: isActive ? agedColor.withOpacity(0.5) : Colors.white10, 
               width: 1.5
             ),
             boxShadow: isActive ? [
-              BoxShadow(color: agedColor.withValues(alpha: 0.2), blurRadius: 20, spreadRadius: 5),
+              BoxShadow(color: agedColor.withOpacity(0.2), blurRadius: 20, spreadRadius: 5),
             ] : [],
           ),
           child: Stack(
@@ -1231,7 +1231,7 @@ class __GhostNoteDisplayState extends State<_GhostNoteDisplay> with SingleTicker
                       Text(
                         widget.note.authorName.toUpperCase(),
                         style: TextStyle(
-                          color: agedColor.withValues(alpha: 0.8),
+                          color: agedColor.withOpacity(0.8),
                           fontSize: 10,
                           fontWeight: FontWeight.w900,
                           letterSpacing: 2.5,
@@ -1261,7 +1261,7 @@ class __GhostNoteDisplayState extends State<_GhostNoteDisplay> with SingleTicker
                           ),
                           onPressed: widget.onComplete,
                           style: TextButton.styleFrom(
-                            backgroundColor: agedColor.withValues(alpha: 0.1),
+                            backgroundColor: agedColor.withOpacity(0.1),
                             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                           ),
@@ -1421,14 +1421,14 @@ class _HolographicAvatarState extends State<_HolographicAvatar> with SingleTicke
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: widget.color.withValues(alpha: 0.1),
+              color: widget.color.withOpacity(0.1),
               border: Border.all(
-                color: widget.color.withValues(alpha: 0.5),
+                color: widget.color.withOpacity(0.5),
                 width: 1,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: widget.color.withValues(alpha: 0.3),
+                  color: widget.color.withOpacity(0.3),
                   blurRadius: 10,
                   spreadRadius: 2,
                 ),
@@ -1649,7 +1649,7 @@ class __YOUNGVariantState extends State<_YOUNGVariant> with SingleTickerProvider
               fontSize: widget.note.fontSize,
               color: Colors.white,
               fontFamily: 'Modern',
-              shadows: [Shadow(color: widget.color.withValues(alpha: 0.5), blurRadius: 10)],
+              shadows: [Shadow(color: widget.color.withOpacity(0.5), blurRadius: 10)],
             ),
             textAlign: TextAlign.center,
           ),
@@ -1691,7 +1691,7 @@ class _PROVariant extends StatelessWidget {
             content,
             style: TextStyle(
               fontSize: note.fontSize,
-              color: color.withValues(alpha: 0.9),
+              color: color.withOpacity(0.9),
               fontFamily: 'Monospace',
               letterSpacing: 1.1,
             ),
@@ -1713,7 +1713,7 @@ class FrostPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors.white.withValues(alpha: 0.3)
+      ..color = Colors.white.withOpacity(0.3)
       ..strokeWidth = 1
       ..style = PaintingStyle.stroke;
 
@@ -1763,9 +1763,9 @@ class __ExplosionOverlayState extends State<_ExplosionOverlay> with SingleTicker
             height: _controller.value * 400,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border: Border.all(color: widget.color.withValues(alpha: 1 - _controller.value), width: 10),
+              border: Border.all(color: widget.color.withOpacity(1 - _controller.value), width: 10),
               boxShadow: [
-                BoxShadow(color: widget.color.withValues(alpha: 0.5 * (1 - _controller.value)), blurRadius: 40),
+                BoxShadow(color: widget.color.withOpacity(0.5 * (1 - _controller.value)), blurRadius: 40),
               ],
             ),
           ),
@@ -1893,7 +1893,7 @@ class __NoteEditorPanelState extends State<_NoteEditorPanel> {
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       decoration: BoxDecoration(
-                        color: _currentMood == NoteMood.joy ? Colors.cyanAccent.withValues(alpha: 0.2) : Colors.white10,
+                        color: _currentMood == NoteMood.joy ? Colors.cyanAccent.withOpacity(0.2) : Colors.white10,
                         borderRadius: BorderRadius.circular(15),
                         border: Border.all(
                           color: _currentMood == NoteMood.joy ? Colors.cyanAccent : Colors.transparent,
@@ -1919,7 +1919,7 @@ class __NoteEditorPanelState extends State<_NoteEditorPanel> {
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       decoration: BoxDecoration(
-                        color: _currentMood == NoteMood.fear ? Colors.purpleAccent.withValues(alpha: 0.2) : Colors.white10,
+                        color: _currentMood == NoteMood.fear ? Colors.purpleAccent.withOpacity(0.2) : Colors.white10,
                         borderRadius: BorderRadius.circular(15),
                         border: Border.all(
                           color: _currentMood == NoteMood.fear ? Colors.purpleAccent : Colors.transparent,
@@ -1951,7 +1951,7 @@ class __NoteEditorPanelState extends State<_NoteEditorPanel> {
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     decoration: BoxDecoration(
-                      color: isSelected ? _neonColor.withValues(alpha: 0.2) : Colors.white10,
+                      color: isSelected ? _neonColor.withOpacity(0.2) : Colors.white10,
                       borderRadius: BorderRadius.circular(15),
                       border: Border.all(
                         color: isSelected ? _neonColor : Colors.transparent,
@@ -1980,7 +1980,7 @@ class __NoteEditorPanelState extends State<_NoteEditorPanel> {
                 hintText: 'Escribe tu mensaje ghost aquí...',
                 hintStyle: const TextStyle(color: Colors.white24),
                 filled: true,
-                fillColor: Colors.white.withValues(alpha: 0.05),
+                fillColor: Colors.white.withOpacity(0.05),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                   borderSide: BorderSide.none,
@@ -2029,7 +2029,7 @@ class __NoteEditorPanelState extends State<_NoteEditorPanel> {
                         shape: BoxShape.circle,
                         border: isSelected ? Border.all(color: Colors.white, width: 3) : null,
                         boxShadow: [
-                          if (isSelected) BoxShadow(color: color.withValues(alpha: 0.6), blurRadius: 10),
+                          if (isSelected) BoxShadow(color: color.withOpacity(0.6), blurRadius: 10),
                         ],
                       ),
                     ),
@@ -2083,7 +2083,7 @@ class __NoteEditorPanelState extends State<_NoteEditorPanel> {
         return Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: _neonColor.withValues(alpha: 0.3),
+            color: _neonColor.withOpacity(0.3),
             borderRadius: BorderRadius.circular(40),
             border: Border.all(color: _neonColor, width: 4),
           ),
@@ -2108,7 +2108,7 @@ class __NoteEditorPanelState extends State<_NoteEditorPanel> {
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [_neonColor.withValues(alpha: 0.4), _neonColor.withValues(alpha: 0.1)],
+                  colors: [_neonColor.withOpacity(0.4), _neonColor.withOpacity(0.1)],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -2161,3 +2161,4 @@ class __NoteEditorPanelState extends State<_NoteEditorPanel> {
     }
   }
 }
+

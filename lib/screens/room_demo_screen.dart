@@ -68,7 +68,7 @@ class _RoomDemoScreenState extends State<RoomDemoScreen> {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: Colors.cyanAccent.withValues(alpha: 0.2),
+                  color: Colors.cyanAccent.withOpacity(0.2),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(color: Colors.cyanAccent),
                 ),
@@ -89,7 +89,7 @@ class _RoomDemoScreenState extends State<RoomDemoScreen> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text('Seleccionado: ${asset.name}'),
-                    backgroundColor: Colors.cyanAccent.withValues(alpha: 0.8),
+                    backgroundColor: Colors.cyanAccent.withOpacity(0.8),
                     duration: const Duration(seconds: 1),
                   ),
                 );
@@ -120,7 +120,7 @@ class _RoomDemoScreenState extends State<RoomDemoScreen> {
             child: Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.black.withValues(alpha: 0.7),
+                color: Colors.black.withOpacity(0.7),
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(color: Colors.white24),
               ),
@@ -135,7 +135,7 @@ class _RoomDemoScreenState extends State<RoomDemoScreen> {
                   Text(
                     'Los objetos que "vibran" tienen notas activas. Girando la cámara verás cómo las paredes se recortan automáticamente para no tapar la visión.',
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 12),
+                    style: TextStyle(color: Colors.white.withOpacity(0.7), fontSize: 12),
                   ),
                 ],
               ),
@@ -150,7 +150,7 @@ class _RoomDemoScreenState extends State<RoomDemoScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha: 0.6),
+        color: Colors.black.withOpacity(0.6),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: Colors.white12),
       ),
@@ -165,3 +165,4 @@ class _RoomDemoScreenState extends State<RoomDemoScreen> {
     );
   }
 }
+
