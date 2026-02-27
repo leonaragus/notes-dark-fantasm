@@ -74,7 +74,7 @@ class _VisionRecorderScreenState extends State<VisionRecorderScreen> {
       
       // Iniciar captura de giroscopio
       _gyroData.clear();
-      _gyroSubscription = gyroscopeEvents.listen((GyroscopeEvent event) {
+      _gyroSubscription = gyroscopeEventStream().listen((GyroscopeEvent event) {
         if (_isRecording) {
           // Guardamos la rotación en el eje Y (horizontal) para el 360
           _gyroData.add(event.y);

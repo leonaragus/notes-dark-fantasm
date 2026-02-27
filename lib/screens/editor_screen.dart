@@ -482,7 +482,7 @@ class _EditorScreenState extends State<EditorScreen> {
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: CyberTheme.neonPurple.withOpacity(0.05 * (2 - value)),
+                        color: CyberTheme.neonPurple.withValues(alpha: 0.05 * (2 - value)),
                         blurRadius: 100,
                         spreadRadius: 50,
                       ),
@@ -512,7 +512,7 @@ class _EditorScreenState extends State<EditorScreen> {
               shape: BoxShape.circle,
               border: Border.all(color: CyberTheme.neonCyan, width: 2),
               boxShadow: [
-                BoxShadow(color: CyberTheme.neonCyan.withOpacity(0.3), blurRadius: 8, spreadRadius: 1),
+                BoxShadow(color: CyberTheme.neonCyan.withValues(alpha: 0.3), blurRadius: 8, spreadRadius: 1),
               ],
             ),
             child: CircleAvatar(
@@ -556,9 +556,9 @@ class _EditorScreenState extends State<EditorScreen> {
       backgroundColor: Colors.transparent,
       builder: (context) => Container(
         decoration: BoxDecoration(
-          color: Colors.black.withOpacity(0.9),
+          color: Colors.black.withValues(alpha: 0.9),
           borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
-          border: Border.all(color: CyberTheme.neonCyan.withOpacity(0.3)),
+          border: Border.all(color: CyberTheme.neonCyan.withValues(alpha: 0.3)),
         ),
         padding: const EdgeInsets.all(30),
         child: Column(
@@ -679,8 +679,8 @@ class _EditorScreenState extends State<EditorScreen> {
       height: 110,
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.black.withOpacity(0.8),
-          border: Border(top: BorderSide(color: CyberTheme.neonCyan.withOpacity(0.5))),
+          color: Colors.black.withValues(alpha: 0.8),
+          border: Border(top: BorderSide(color: CyberTheme.neonCyan.withValues(alpha: 0.5))),
         ),
         child: ListView(
           scrollDirection: Axis.horizontal,
@@ -693,9 +693,9 @@ class _EditorScreenState extends State<EditorScreen> {
                 width: 90,
                 margin: const EdgeInsets.symmetric(horizontal: 5),
                 decoration: BoxDecoration(
-                  color: CyberTheme.accentColor.withOpacity(0.4),
+                  color: CyberTheme.accentColor.withValues(alpha: 0.4),
                   borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: CyberTheme.neonCyan.withOpacity(0.2)),
+                  border: Border.all(color: CyberTheme.neonCyan.withValues(alpha: 0.2)),
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -756,13 +756,13 @@ class _EditorScreenState extends State<EditorScreen> {
                 onPressed: () => _openVisionRecorder(selectedAsset!),
                 icon: const Icon(Icons.videocam),
                 label: const Text('REGISTRAR VISIÓN'),
-                style: ElevatedButton.styleFrom(backgroundColor: CyberTheme.neonCyan.withOpacity(0.2), foregroundColor: CyberTheme.neonCyan, side: BorderSide(color: CyberTheme.neonCyan)),
+                style: ElevatedButton.styleFrom(backgroundColor: CyberTheme.neonCyan.withValues(alpha: 0.2), foregroundColor: CyberTheme.neonCyan, side: BorderSide(color: CyberTheme.neonCyan)),
               ),
             )
           else
             Container(
               padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(color: Colors.greenAccent.withOpacity(0.1), borderRadius: BorderRadius.circular(4), border: Border.all(color: Colors.greenAccent)),
+              decoration: BoxDecoration(color: Colors.greenAccent.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(4), border: Border.all(color: Colors.greenAccent)),
               child: Row(
                 children: [
                   const Icon(Icons.check_circle, color: Colors.greenAccent, size: 16),
@@ -783,7 +783,7 @@ class _EditorScreenState extends State<EditorScreen> {
               onPressed: () => _deleteAsset(selectedAsset!),
               icon: const Icon(Icons.delete),
               label: const Text('ELIMINAR'),
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent.withOpacity(0.2), foregroundColor: Colors.redAccent),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent.withValues(alpha: 0.2), foregroundColor: Colors.redAccent),
             ),
           ),
         ],
@@ -894,7 +894,7 @@ class _EditorScreenState extends State<EditorScreen> {
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: (note.mood == NoteMood.joy ? CyberTheme.neonGreen : Colors.redAccent).withOpacity(0.3),
+                          color: (note.mood == NoteMood.joy ? CyberTheme.neonGreen : Colors.redAccent).withValues(alpha: 0.3),
                           blurRadius: 4,
                         )
                       ],
@@ -917,7 +917,7 @@ class _EditorScreenState extends State<EditorScreen> {
           onTap: () {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                backgroundColor: Colors.black.withOpacity(0.9),
+                backgroundColor: Colors.black.withValues(alpha: 0.9),
                 content: Text(
                   'CONTENIDO MATERIALIZADO EN LA REALIDAD.\nAcercate a ${selectedRoomType.name.toUpperCase()} para revelar el mensaje.',
                   textAlign: TextAlign.center,
@@ -930,16 +930,16 @@ class _EditorScreenState extends State<EditorScreen> {
           child: Container(
             height: 100, // Un poco más pequeño para dar espacio a los avatares
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.03),
+              color: Colors.white.withValues(alpha: 0.03),
               borderRadius: BorderRadius.circular(15),
-              border: Border.all(color: CyberTheme.neonCyan.withOpacity(0.1)),
+              border: Border.all(color: CyberTheme.neonCyan.withValues(alpha: 0.1)),
             ),
             child: Stack(
               children: [
                 // Fondo con patrón de rejilla técnica
                 Positioned.fill(
                   child: CustomPaint(
-                    painter: _GridPainter(color: CyberTheme.neonCyan.withOpacity(0.05)),
+                    painter: _GridPainter(color: CyberTheme.neonCyan.withValues(alpha: 0.05)),
                   ),
                 ),
                 
@@ -951,7 +951,7 @@ class _EditorScreenState extends State<EditorScreen> {
                       filter: ui.ImageFilter.blur(sigmaX: 12, sigmaY: 12),
                       child: Container(
                         padding: const EdgeInsets.all(15),
-                        color: Colors.black.withOpacity(0.4),
+                        color: Colors.black.withValues(alpha: 0.4),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -972,7 +972,7 @@ class _EditorScreenState extends State<EditorScreen> {
                             Text(
                               'Acceso exclusivo desde el Espejo Virtual',
                               textAlign: TextAlign.center,
-                              style: TextStyle(color: Colors.white.withOpacity(0.4), fontSize: 8, letterSpacing: 0.5),
+                              style: TextStyle(color: Colors.white.withValues(alpha: 0.4), fontSize: 8, letterSpacing: 0.5),
                             ),
                           ],
                         ),
@@ -992,7 +992,7 @@ class _EditorScreenState extends State<EditorScreen> {
             icon: const Icon(Icons.add_comment, size: 18),
             label: const Text('ESCRIBIR NOTA GHOST', style: TextStyle(fontFamily: 'Orbitron', fontSize: 10, letterSpacing: 1)),
             style: ElevatedButton.styleFrom(
-              backgroundColor: CyberTheme.neonPurple.withOpacity(0.1),
+              backgroundColor: CyberTheme.neonPurple.withValues(alpha: 0.1),
               foregroundColor: CyberTheme.neonPurple,
               side: const BorderSide(color: CyberTheme.neonPurple, width: 1.5),
               padding: const EdgeInsets.symmetric(vertical: 12),
@@ -1008,10 +1008,10 @@ class _EditorScreenState extends State<EditorScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(4),
-        border: Border.all(color: color.withOpacity(0.5)),
-        boxShadow: [BoxShadow(color: color.withOpacity(0.2), blurRadius: 4)],
+        border: Border.all(color: color.withValues(alpha: 0.5)),
+        boxShadow: [BoxShadow(color: color.withValues(alpha: 0.2), blurRadius: 4)],
       ),
       child: Text(text, style: TextStyle(color: color, fontSize: 8, fontWeight: FontWeight.bold, fontFamily: 'Orbitron')),
     );
@@ -1109,9 +1109,9 @@ class _EditorScreenState extends State<EditorScreen> {
         builder: (context, setModalState) => Container(
           padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom, left: 20, right: 20, top: 20),
           decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.95),
+            color: Colors.black.withValues(alpha: 0.95),
             borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
-            border: Border.all(color: CyberTheme.neonPurple.withOpacity(0.3)),
+            border: Border.all(color: CyberTheme.neonPurple.withValues(alpha: 0.3)),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -1141,7 +1141,7 @@ class _EditorScreenState extends State<EditorScreen> {
                         _selectedMood = index == 0 ? NoteMood.joy : NoteMood.fear;
                       });
                     },
-                    fillColor: _selectedMood == NoteMood.joy ? Colors.green.withOpacity(0.2) : Colors.red.withOpacity(0.2),
+                    fillColor: _selectedMood == NoteMood.joy ? Colors.green.withValues(alpha: 0.2) : Colors.red.withValues(alpha: 0.2),
                     selectedColor: _selectedMood == NoteMood.joy ? Colors.greenAccent : Colors.redAccent,
                     children: const [
                       Padding(padding: EdgeInsets.symmetric(horizontal: 16), child: Icon(Icons.sentiment_very_satisfied)),

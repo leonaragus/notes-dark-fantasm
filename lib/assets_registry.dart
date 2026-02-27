@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vector_math/vector_math_64.dart';
+import 'package:vector_math/vector_math_64.dart' as v;
 import 'models/room_models.dart';
 
 class AssetRegistry {
@@ -91,7 +91,7 @@ class AssetRegistry {
     415: {'name': 'Toallero', 'category': 'Baño', 'model': 'assets/models/towelRack.obj', 'dimensions': const AssetDimension(width: 0.6, depth: 0.2, height: 1.2)},
   };
 
-  static FurnitureAsset createAsset(int id, Vector3 pos) {
+  static FurnitureAsset createAsset(int id, v.Vector3 pos) {
     final data = models[id];
     if (data == null) throw Exception('Model ID $id not found');
 

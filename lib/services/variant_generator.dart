@@ -1,4 +1,4 @@
-import 'package:vector_math/vector_math_64.dart';
+import 'package:vector_math/vector_math_64.dart' hide Colors;
 import '../models/room_models.dart';
 import '../assets_registry.dart';
 import 'package:flutter/material.dart';

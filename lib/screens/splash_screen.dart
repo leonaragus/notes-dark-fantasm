@@ -18,7 +18,6 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
   late AnimationController _tutorialController;
   
   int _currentAct = 0; // 0: Logo, 1: Diseño, 2: Sincronización, 3: Resultado, 4: Welcome
-  bool _showTutorial = false;
 
   @override
   void initState() {
@@ -51,7 +50,6 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
   }
 
   void _startTutorial() {
-    setState(() => _showTutorial = true);
     _logoController.forward().then((_) {
       Future.delayed(const Duration(seconds: 1), () {
         _runTutorialActs();
@@ -175,7 +173,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
               const Icon(Icons.kitchen, color: Colors.cyanAccent, size: 80),
               Positioned(
                 bottom: 20, right: 20,
-                child: Icon(Icons.touch_app, color: Colors.white.withOpacity(0.5), size: 40),
+                child: Icon(Icons.touch_app, color: Colors.white.withValues(alpha: 0.5), size: 40),
               ),
             ],
           ),
@@ -200,7 +198,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
                 width: 100, height: 100,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  boxShadow: [BoxShadow(color: Colors.pinkAccent.withOpacity(0.3), blurRadius: 40, spreadRadius: 10)],
+                  boxShadow: [BoxShadow(color: Colors.pinkAccent.withValues(alpha: 0.3), blurRadius: 40, spreadRadius: 10)],
                 ),
               ),
               const Icon(Icons.sticky_note_2, color: Colors.pinkAccent, size: 80),
@@ -268,7 +266,7 @@ class _TutorialActWrapper extends StatelessWidget {
     return Container(
       width: 250, height: 250,
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.05),
+        color: Colors.white.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(40),
         border: Border.all(color: Colors.white10),
       ),
@@ -297,8 +295,7 @@ class _BackgroundParticles extends StatelessWidget {
 class _ParticlePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()..color = Colors.cyanAccent.withOpacity(0.05);
-    final random = ui.Gradient.linear(Offset.zero, Offset(size.width, size.height), [Colors.transparent, Colors.transparent]);
+    final paint = Paint()..color = Colors.cyanAccent.withValues(alpha: 0.05);
     // Dibujo estático para el demo, se puede animar
     for (var i = 0; i < 20; i++) {
       canvas.drawCircle(Offset(size.width * (i/20), size.height * (i/20)), 2, paint);

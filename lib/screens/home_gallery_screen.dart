@@ -50,7 +50,7 @@ class _HomeGalleryScreenState extends State<HomeGalleryScreen> {
   Future<void> _loadSharedRooms() async {
     if (_currentSSID == null) return;
     
-    // Simulación de fetch de red familiar - Deshabilitado por ahora
+    // Simulación de fetch de red familiar - Deshabilitado por ahora (Cleaned)
     setState(() {
       _sharedRooms = [];
     });
@@ -191,7 +191,7 @@ class _HomeGalleryScreenState extends State<HomeGalleryScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Text('MIS MAQUETAS 3D', 
-                    style: TextStyle(color: CyberTheme.neonCyan.withOpacity(0.7), fontSize: 12, letterSpacing: 4, fontFamily: 'Orbitron')),
+                    style: TextStyle(color: CyberTheme.neonCyan.withValues(alpha: 0.7), fontSize: 12, letterSpacing: 4, fontFamily: 'Orbitron')),
                 ),
                 const SizedBox(height: 15),
                 Expanded(
@@ -241,7 +241,7 @@ class _HomeGalleryScreenState extends State<HomeGalleryScreen> {
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: CyberTheme.neonPurple.withOpacity(0.03 * (2 - value)),
+                        color: CyberTheme.neonPurple.withValues(alpha: 0.03 * (2 - value)),
                         blurRadius: 150,
                         spreadRadius: 80,
                       ),
@@ -278,14 +278,14 @@ class _HomeGalleryScreenState extends State<HomeGalleryScreen> {
                   ).then((_) => _loadData());
                 },
                 child: Container(
-                  padding: const EdgeInsets.all(2),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: CyberTheme.neonCyan, width: 2),
-                    boxShadow: [
-                      BoxShadow(color: CyberTheme.neonCyan.withOpacity(0.3), blurRadius: 8),
-                    ],
-                  ),
+                    padding: const EdgeInsets.all(2),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: CyberTheme.neonCyan, width: 2),
+                      boxShadow: [
+                        BoxShadow(color: CyberTheme.neonCyan.withValues(alpha: 0.3), blurRadius: 8),
+                      ],
+                    ),
                   child: CircleAvatar(
                     radius: 18,
                     backgroundColor: Colors.black,
@@ -316,7 +316,7 @@ class _HomeGalleryScreenState extends State<HomeGalleryScreen> {
       child: Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.05),
+          color: Colors.white.withValues(alpha: 0.05),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: Colors.white10),
         ),
@@ -379,16 +379,16 @@ class _HomeGalleryScreenState extends State<HomeGalleryScreen> {
           onTap: () => _openRoom(room),
           child: Container(
             decoration: BoxDecoration(
-              color: room.isShared ? CyberTheme.neonPurple.withOpacity(0.05) : Colors.white.withOpacity(0.05),
+              color: room.isShared ? CyberTheme.neonPurple.withValues(alpha: 0.05) : Colors.white.withValues(alpha: 0.05),
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
-                color: room.isShared ? CyberTheme.neonPurple.withOpacity(0.3) : (hasUnread ? CyberTheme.neonGreen.withOpacity(0.5) : Colors.white10),
+                color: room.isShared ? CyberTheme.neonPurple.withValues(alpha: 0.3) : (hasUnread ? CyberTheme.neonGreen.withValues(alpha: 0.5) : Colors.white10),
                 width: (hasUnread || room.isShared) ? 2 : 1,
               ),
               boxShadow: hasUnread ? [
-                BoxShadow(color: (room.isShared ? CyberTheme.neonPurple : CyberTheme.neonGreen).withOpacity(0.2), blurRadius: 15, spreadRadius: 2)
+                BoxShadow(color: (room.isShared ? CyberTheme.neonPurple : CyberTheme.neonGreen).withValues(alpha: 0.2), blurRadius: 15, spreadRadius: 2)
               ] : [
-                BoxShadow(color: Colors.black.withOpacity(0.5), blurRadius: 10)
+                BoxShadow(color: Colors.black.withValues(alpha: 0.5), blurRadius: 10)
               ],
             ),
             child: ClipRRect(
@@ -405,7 +405,7 @@ class _HomeGalleryScreenState extends State<HomeGalleryScreen> {
                             gradient: LinearGradient(
                               begin: Alignment.topCenter,
                               end: Alignment.bottomCenter,
-                              colors: [Colors.black.withOpacity(0.3), Colors.transparent],
+                              colors: [Colors.black.withValues(alpha: 0.3), Colors.transparent],
                             ),
                           ),
                           child: IgnorePointer(
@@ -424,7 +424,7 @@ class _HomeGalleryScreenState extends State<HomeGalleryScreen> {
                               begin: Alignment.bottomCenter,
                               end: Alignment.topCenter,
                               colors: [
-                                Colors.black.withOpacity(0.6),
+                                Colors.black.withValues(alpha: 0.6),
                                 Colors.transparent,
                               ],
                             ),
@@ -463,7 +463,7 @@ class _HomeGalleryScreenState extends State<HomeGalleryScreen> {
                         Positioned(
                           bottom: 10,
                           left: 12,
-                          child: Icon(_getRoomIcon(room.type), color: CyberTheme.neonCyan.withOpacity(0.5), size: 16),
+                          child: Icon(_getRoomIcon(room.type), color: CyberTheme.neonCyan.withValues(alpha: 0.5), size: 16),
                         ),
                       ],
                     ),
@@ -543,7 +543,7 @@ class __NeonPulseIndicatorState extends State<_NeonPulseIndicator> with SingleTi
           shape: BoxShape.circle,
           color: widget.color,
           boxShadow: [
-            BoxShadow(color: widget.color.withOpacity(0.8), blurRadius: 10, spreadRadius: 2),
+            BoxShadow(color: widget.color.withValues(alpha: 0.8), blurRadius: 10, spreadRadius: 2),
           ],
         ),
       ),

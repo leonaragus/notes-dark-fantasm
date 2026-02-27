@@ -117,7 +117,7 @@ class _ProfileRegistrationScreenState extends State<ProfileRegistrationScreen> {
                   child: Container(
                     padding: const EdgeInsets.all(40),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.05),
+                      color: Colors.white.withValues(alpha: 0.05),
                       borderRadius: BorderRadius.circular(30),
                       border: Border.all(color: Colors.white10),
                     ),
@@ -145,10 +145,10 @@ class _ProfileRegistrationScreenState extends State<ProfileRegistrationScreen> {
                           height: 100,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            border: Border.all(color: Colors.cyanAccent.withOpacity(0.5), width: 2),
+                            border: Border.all(color: Colors.cyanAccent.withValues(alpha: 0.5), width: 2),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.cyanAccent.withOpacity(0.2),
+                                color: Colors.cyanAccent.withValues(alpha: 0.2),
                                 blurRadius: 20,
                                 spreadRadius: 5,
                               )
@@ -183,7 +183,7 @@ class _ProfileRegistrationScreenState extends State<ProfileRegistrationScreen> {
                             padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                             elevation: 10,
-                            shadowColor: Colors.cyanAccent.withOpacity(0.5),
+                            shadowColor: Colors.cyanAccent.withValues(alpha: 0.5),
                           ),
                           child: Text(
                             widget.isEditing ? 'GUARDAR' : 'COMENZAR',
@@ -228,7 +228,7 @@ class _ProfileRegistrationScreenState extends State<ProfileRegistrationScreen> {
 class _ProfileBackgroundPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()..color = Colors.cyanAccent.withOpacity(0.03);
+    final paint = Paint()..color = Colors.cyanAccent.withValues(alpha: 0.03);
     for (var i = 0; i < 15; i++) {
       canvas.drawCircle(
         Offset(size.width * (i / 15), size.height * (i / 15)),

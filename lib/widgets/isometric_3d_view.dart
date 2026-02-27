@@ -130,7 +130,7 @@ class IsometricMaquettePainter extends CustomPainter {
     _drawWalls(canvas, center);
     
     final sortedAssets = List<FurnitureAsset>.from(assets)
-      ..sort((a, b) => (a.y + a.x).compareTo(b.y + b.x));
+      ..sort((a, b) => (a.position.z + a.position.x).compareTo(b.position.z + b.position.x));
 
     for (var asset in sortedAssets) {
       _drawAsset(canvas, center, asset);
@@ -173,7 +173,7 @@ class IsometricMaquettePainter extends CustomPainter {
     
     // Dibujar patrón de rejilla/textura suave
     final gridPaint = Paint()
-      ..color = Colors.black.withOpacity(0.05)
+      ..color = Colors.black.withValues(alpha: 0.05)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.0;
     
@@ -233,8 +233,9 @@ class IsometricMaquettePainter extends CustomPainter {
   }
 
   void _drawAsset(Canvas canvas, Offset center, FurnitureAsset asset) {
-    double isoX = (asset.x - asset.y) * math.cos(math.pi / 6);
-    double isoY = (asset.x + asset.y) * math.sin(math.pi / 6);
+    double pixelsPerMeter = 40.0;
+    double isoX = (asset.position.x - asset.position.z) * math.cos(math.pi / 6) * pixelsPerMeter;
+    double isoY = (asset.position.x + asset.position.z) * math.sin(math.pi / 6) * pixelsPerMeter;
     Offset basePos = center + Offset(isoX, -isoY);
 
     double opacity = proximity.clamp(0.3, 1.0);
@@ -257,7 +258,7 @@ class IsometricMaquettePainter extends CustomPainter {
         destH
       );
 
-      canvas.saveLayer(destRect, Paint()..color = Colors.white.withOpacity(opacity));
+      canvas.saveLayer(destRect, Paint()..color = Colors.white.withValues(alpha: opacity));
       canvas.drawImageRect(
         img,
         Rect.fromLTWH(0, 0, img.width.toDouble(), img.height.toDouble()),
@@ -271,7 +272,7 @@ class IsometricMaquettePainter extends CustomPainter {
         canvas.drawRect(
           destRect.inflate(4),
           Paint()
-            ..color = asset.color.withOpacity(0.2 * proximity)
+            ..color = asset.color.withValues(alpha: 0.2 * proximity)
             ..style = PaintingStyle.stroke
             ..strokeWidth = 2
             ..maskFilter = const MaskFilter.blur(BlurStyle.outer, 8)
@@ -279,7 +280,7 @@ class IsometricMaquettePainter extends CustomPainter {
       }
     } else {
       // Fallback a cubo si no hay sprite cargado
-      final paint = Paint()..color = asset.color.withOpacity(opacity);
+      final paint = Paint()..color = asset.color.withValues(alpha: opacity);
       _drawFallbackCube(canvas, basePos, asset, paint, scale);
     }
   }

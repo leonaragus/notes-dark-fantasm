@@ -76,7 +76,7 @@ class _RecordingModuleScreenState extends State<RecordingModuleScreen> {
     _lastAccel = v.Vector3.zero();
 
     // 1. Conteo de pasos y detección de movimiento
-    _userAccelSub = userAccelerometerEvents.listen((event) {
+    _userAccelSub = userAccelerometerEventStream().listen((event) {
       final currentAccel = v.Vector3(event.x, event.y, event.z);
       
       // Filtro simple para detectar movimiento
@@ -145,7 +145,7 @@ class _RecordingModuleScreenState extends State<RecordingModuleScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: const Text('Sala Identificada: Persistencia Fantasmagórica Activada'),
-        backgroundColor: Colors.cyanAccent.withOpacity(0.8),
+        backgroundColor: Colors.cyanAccent.withValues(alpha: 0.8),
         duration: const Duration(seconds: 2),
       ),
     );
@@ -287,7 +287,7 @@ class _RecordingModuleScreenState extends State<RecordingModuleScreen> {
       _wifiBuffer.clear();
       _lastGyroTimestamp = 0;
       
-      _gyroSub = gyroscopeEvents.listen((event) {
+      _gyroSub = gyroscopeEventStream().listen((event) {
         if (_isRecording) {
           final now = DateTime.now().millisecondsSinceEpoch;
           
@@ -512,10 +512,10 @@ class _RecordingModuleScreenState extends State<RecordingModuleScreen> {
             decoration: BoxDecoration(
               color: const Color(0xFF1A1A1A),
               borderRadius: BorderRadius.circular(30),
-              border: Border.all(color: Colors.cyanAccent.withOpacity(0.3)),
+              border: Border.all(color: Colors.cyanAccent.withValues(alpha: 0.3)),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.cyanAccent.withOpacity(0.1),
+                  color: Colors.cyanAccent.withValues(alpha: 0.1),
                   blurRadius: 20,
                   spreadRadius: 5,
                 )
@@ -609,7 +609,7 @@ class _RecordingModuleScreenState extends State<RecordingModuleScreen> {
                       Container(
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.05),
+                          color: Colors.white.withValues(alpha: 0.05),
                           shape: BoxShape.circle,
                           border: Border.all(color: Colors.white10),
                         ),
@@ -738,7 +738,7 @@ class _StatusBadge extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.black54,
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: color.withOpacity(0.5)),
+        border: Border.all(color: color.withValues(alpha: 0.5)),
       ),
       child: Column(
         children: [

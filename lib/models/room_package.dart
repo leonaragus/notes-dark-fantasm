@@ -17,7 +17,7 @@ class SensorPreCheckService {
 
     // 1. Giroscopio check
     try {
-      final gyroEvent = await gyroscopeEvents.first.timeout(const Duration(seconds: 1));
+      final gyroEvent = await gyroscopeEventStream().first.timeout(const Duration(seconds: 1));
       results['gyroscope'] = true;
     } catch (e) {
       results['errors'].add('Giroscopio no detectado o desactivado.');

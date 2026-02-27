@@ -74,7 +74,7 @@ class _RoomSelectionScreenState extends State<RoomSelectionScreen> {
               Text(
                 'Seleccioná un espacio para comenzar',
                 style: TextStyle(
-                  color: Colors.cyanAccent.withOpacity(0.7),
+                  color: Colors.cyanAccent.withValues(alpha: 0.7),
                   fontSize: 16,
                 ),
               ),
@@ -99,7 +99,7 @@ class _RoomSelectionScreenState extends State<RoomSelectionScreen> {
                             color: const Color(0xFF1A1A1A),
                             borderRadius: BorderRadius.circular(24),
                             border: Border.all(
-                              color: Colors.white.withOpacity(0.05),
+                              color: Colors.white.withValues(alpha: 0.05),
                               width: 1,
                             ),
                           ),
@@ -149,9 +149,9 @@ class ShapeSelectorPopUp extends StatelessWidget {
           width: MediaQuery.of(context).size.width * 0.85,
           padding: const EdgeInsets.all(24),
           decoration: BoxDecoration(
-            color: const Color(0xFF1A1A1A).withOpacity(0.9),
+            color: const Color(0xFF1A1A1A).withValues(alpha: 0.9),
             borderRadius: BorderRadius.circular(32),
-            border: Border.all(color: Colors.cyanAccent.withOpacity(0.2)),
+            border: Border.all(color: Colors.cyanAccent.withValues(alpha: 0.2)),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -224,7 +224,7 @@ class _ShapeOption extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.05),
+          color: Colors.white.withValues(alpha: 0.05),
           borderRadius: BorderRadius.circular(20),
         ),
         child: Row(
@@ -293,9 +293,9 @@ class SizeSelectorPopUp extends StatelessWidget {
           maxHeight: MediaQuery.of(context).size.height * 0.7,
           padding: const EdgeInsets.all(24),
           decoration: BoxDecoration(
-            color: const Color(0xFF1A1A1A).withOpacity(0.9),
+            color: const Color(0xFF1A1A1A).withValues(alpha: 0.9),
             borderRadius: BorderRadius.circular(32),
-            border: Border.all(color: Colors.cyanAccent.withOpacity(0.2)),
+            border: Border.all(color: Colors.cyanAccent.withValues(alpha: 0.2)),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -341,7 +341,7 @@ class SizeSelectorPopUp extends StatelessWidget {
                         child: Container(
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.05),
+                            color: Colors.white.withValues(alpha: 0.05),
                             borderRadius: BorderRadius.circular(16),
                           ),
                           child: Center(
@@ -404,7 +404,7 @@ class _RoomPreview3DScreenState extends State<RoomPreview3DScreen> {
       scale: v.Vector3(dim.x, 0.1, dim.y),
       position: v.Vector3(0, -0.05, 0),
     );
-    floor.mesh.color.setValues(0.2, 0.2, 0.2);
+    floor.mesh.material.diffuse.setValues(0.2, 0.2, 0.2);
     _scene.world.add(floor);
 
     // Paredes según forma
@@ -441,10 +441,10 @@ class _RoomPreview3DScreenState extends State<RoomPreview3DScreen> {
     if (_isEditing) {
       if (!asset.isAnchored) {
         // Red ghost if not anchored
-        obj.mesh.color.setValues(1.0, 0.4, 0.4); 
+        obj.mesh.material.diffuse.setValues(1.0, 0.4, 0.4); 
       } else {
         // Cyan ghost if already anchored
-        obj.mesh.color.setValues(0.4, 1.0, 1.0);
+        obj.mesh.material.diffuse.setValues(0.4, 1.0, 1.0);
       }
     }
 
@@ -459,7 +459,7 @@ class _RoomPreview3DScreenState extends State<RoomPreview3DScreen> {
       scale: scale,
       backfaceCulling: false,
     );
-    wall.mesh.color.setValues(0.3, 0.3, 0.3);
+    wall.mesh.material.diffuse.setValues(0.3, 0.3, 0.3);
     _scene.world.add(wall);
   }
 
@@ -529,7 +529,7 @@ class _RoomPreview3DScreenState extends State<RoomPreview3DScreen> {
     });
     // Update all assets to solid
     for (var entry in _assetObjects.entries) {
-      entry.value.mesh.color.setValues(1.0, 1.0, 1.0); // Reset to original colors
+      entry.value.mesh.material.diffuse.setValues(1.0, 1.0, 1.0); // Reset to original colors
     }
     _scene.update();
   }
@@ -575,7 +575,7 @@ class _RoomPreview3DScreenState extends State<RoomPreview3DScreen> {
                       },
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.05),
+                          color: Colors.white.withValues(alpha: 0.05),
                           borderRadius: BorderRadius.circular(16),
                         ),
                         child: Column(
@@ -596,6 +596,18 @@ class _RoomPreview3DScreenState extends State<RoomPreview3DScreen> {
                       ),
                     );
                   },
+                ),
+              ),
+              const SizedBox(height: 20),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () => Navigator.pop(context),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.cyanAccent.withValues(alpha: 0.1),
+                    side: const BorderSide(color: Colors.cyanAccent),
+                  ),
+                  child: const Text('CANCELAR', style: TextStyle(color: Colors.cyanAccent)),
                 ),
               ),
             ],
@@ -725,9 +737,9 @@ class _RoomPreview3DScreenState extends State<RoomPreview3DScreen> {
       // Simple Collision Check
       bool isColliding = _checkCollision(assetIndex);
       if (isColliding) {
-        _assetObjects[_selectedAssetId!]!.mesh.color.setValues(1.0, 0.3, 0.3); // Red ghost
+        _assetObjects[_selectedAssetId!]!.mesh.material.diffuse.setValues(1.0, 0.3, 0.3); // Red ghost
       } else {
-        _assetObjects[_selectedAssetId!]!.mesh.color.setValues(0.6, 0.9, 1.0); // Normal ghost
+        _assetObjects[_selectedAssetId!]!.mesh.material.diffuse.setValues(0.6, 0.9, 1.0); // Normal ghost
       }
     });
     _scene.update();
@@ -786,9 +798,9 @@ class _RoomPreview3DScreenState extends State<RoomPreview3DScreen> {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: const Color(0xFF1A1A1A).withOpacity(0.9),
+              color: const Color(0xFF1A1A1A).withValues(alpha: 0.9),
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: Colors.cyanAccent.withOpacity(0.3)),
+              border: Border.all(color: Colors.cyanAccent.withValues(alpha: 0.3)),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -802,15 +814,17 @@ class _RoomPreview3DScreenState extends State<RoomPreview3DScreen> {
                     _refreshScene();
                   },
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                     decoration: BoxDecoration(
-                      color: isSelected ? Colors.cyanAccent : Colors.transparent,
-                      borderRadius: BorderRadius.circular(16),
+                      color: isSelected ? Colors.cyanAccent.withValues(alpha: 0.2) : Colors.transparent,
+                      borderRadius: BorderRadius.circular(15),
+                      border: Border.all(color: isSelected ? Colors.cyanAccent : Colors.white10),
                     ),
                     child: Text(
-                      'Variante $v',
+                      'VARIANTE $v',
                       style: TextStyle(
-                        color: isSelected ? Colors.black : Colors.white,
+                        color: isSelected ? Colors.cyanAccent : Colors.white54,
+                        fontSize: 12,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -819,79 +833,20 @@ class _RoomPreview3DScreenState extends State<RoomPreview3DScreen> {
               }).toList(),
             ),
           ),
-          const SizedBox(height: 12),
-          Text(
-            _getVariantDescription(),
-            style: const TextStyle(color: Colors.white54, fontSize: 12),
-          ),
         ],
       ),
     );
   }
 
-  String _getVariantDescription() {
-    switch (_selectedVariant) {
-      case 'A': return 'Esencial: Muebles básicos alineados.';
-      case 'B': return 'Funcional: Aprovechando esquinas y espacio.';
-      case 'C': return 'Premium: Distribución completa con extras.';
-      default: return '';
-    }
-  }
-
   Widget _buildFinishButton() {
-    bool allAnchored = _currentAssets.every((a) => a.isAnchored);
-    
     return Positioned(
       bottom: 40,
-      left: 60,
-      right: 60,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (!allAnchored)
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              margin: const EdgeInsets.only(bottom: 12),
-              decoration: BoxDecoration(
-                color: Colors.redAccent.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.redAccent.withOpacity(0.5)),
-              ),
-              child: const Text(
-                'PASO CERO: Calibrá los muebles nuevos en el mundo real para continuar.',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.redAccent, fontSize: 11, fontWeight: FontWeight.bold),
-              ),
-            ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: allAnchored ? Colors.cyanAccent : Colors.grey[800],
-              foregroundColor: allAnchored ? Colors.black : Colors.white24,
-              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-            ),
-            onPressed: allAnchored ? () {
-              // Transition to 360 recording flow
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => RecordingModuleScreen(
-                    config: widget.config,
-                    assets: _currentAssets,
-                  ),
-                ),
-              );
-            } : null,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(allAnchored ? Icons.videocam : Icons.lock_outline, size: 20),
-                const SizedBox(width: 8),
-                const Text('IR A GRABAR 360', style: TextStyle(fontWeight: FontWeight.bold)),
-              ],
-            ),
-          ),
-        ],
+      left: 20,
+      right: 20,
+      child: CyberButton(
+        text: 'CONFIRMAR DISEÑO',
+        onPressed: _confirmDesign,
+        isFullWidth: true,
       ),
     );
   }
@@ -905,7 +860,7 @@ class _CircleButton extends StatelessWidget {
   const _CircleButton({
     required this.icon,
     required this.onTap,
-    this.color = Colors.white24,
+    this.color = Colors.white,
   });
 
   @override
@@ -916,10 +871,11 @@ class _CircleButton extends StatelessWidget {
         width: 50,
         height: 50,
         decoration: BoxDecoration(
-          color: color.withOpacity(0.8),
+          color: Colors.black.withValues(alpha: 0.5),
           shape: BoxShape.circle,
+          border: Border.all(color: color.withValues(alpha: 0.5)),
         ),
-        child: Icon(icon, color: color == Colors.white24 ? Colors.white : Colors.black),
+        child: Icon(icon, color: color, size: 24),
       ),
     );
   }

@@ -121,12 +121,12 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: (_subscription.isPremium ? CyberTheme.neonPurple : CyberTheme.neonCyan).withOpacity(0.1),
+        color: (_subscription.isPremium ? CyberTheme.neonPurple : CyberTheme.neonCyan).withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: _subscription.isPremium ? CyberTheme.neonPurple : CyberTheme.neonCyan, width: 2),
         boxShadow: [
           BoxShadow(
-            color: (_subscription.isPremium ? CyberTheme.neonPurple : CyberTheme.neonCyan).withOpacity(0.2),
+            color: (_subscription.isPremium ? CyberTheme.neonPurple : CyberTheme.neonCyan).withValues(alpha: 0.2),
             blurRadius: 20,
           ),
         ],
@@ -175,7 +175,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
         width: double.infinity,
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.05),
+          color: Colors.white.withValues(alpha: 0.05),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: isCurrent ? color : Colors.white10, width: isCurrent ? 2 : 1),
         ),

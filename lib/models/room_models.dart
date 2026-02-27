@@ -152,7 +152,7 @@ class FurnitureAsset {
   final IconData icon;
   final Color color;
   final String? videoPath; 
-  final bool hasUnreadNotes; 
+  bool hasUnreadNotes; 
   final String? spriteUrl; 
   final String? modelPath; // Ruta al archivo .obj
   final bool isAnchored; // Paso Cero: ¿Ya fue calibrado en la realidad?
