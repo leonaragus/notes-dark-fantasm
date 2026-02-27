@@ -1,0 +1,20 @@
+{
+    "name": "Flutter Digital Twin",
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "dart-code.flutter",
+                "dart-code.dart-code",
+                "vscjava.vscode-java-pack"
+            ]
+        }
+    },
+    "remoteUser": "root",
+    "features": {
+        "ghcr.io/devcontainers/features/github-cli:1": {}
+    },
+    "postCreateCommand": "flutter pub get && flutter doctor"
+}
