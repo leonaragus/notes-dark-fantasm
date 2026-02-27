@@ -1,6 +1,6 @@
 name: ghost_notes_digital_twin
 description: A new Flutter project for Ghost Notes Digital Twin.
-version: 1.0.1+3
+version: 1.0.1+4
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
