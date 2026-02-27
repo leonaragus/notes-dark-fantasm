@@ -30,25 +30,25 @@ dev_dependencies:
   flutter_launcher_icons: ^0.13.1
   flutter_native_splash: ^2.4.0
 
-flutter_icons:
-  android: true
-  ios: true
-  image_path: "assets/images/app_icon.png"
+# flutter_icons:
+#   android: true
+#   ios: true
+#   image_path: "assets/images/app_icon.png"
 
-flutter_native_splash:
-  color: "#000000"
-  image: "assets/images/splash_logo.png"
-  android: true
-  ios: true
+# flutter_native_splash:
+#   color: "#000000"
+#   image: "assets/images/splash_logo.png"
+#   android: true
+#   ios: true
 
 flutter:
   uses-material-design: true
 
   assets:
     - assets/models/
-    - assets/images/furniture/cocina/
-    - assets/images/furniture/living/
-    - assets/images/furniture/dormitorio/
-    - assets/images/furniture/bano/
-    - assets/images/furniture/patio/
-    - assets/images/furniture/pisos/
+    # - assets/images/furniture/cocina/
+    # - assets/images/furniture/living/
+    # - assets/images/furniture/dormitorio/
+    # - assets/images/furniture/bano/
+    # - assets/images/furniture/patio/
+    # - assets/images/furniture/pisos/
