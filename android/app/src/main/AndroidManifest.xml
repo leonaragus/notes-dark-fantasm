@@ -55,7 +55,7 @@
         android:usesCleartextTraffic="true">
         
         <activity
-            android:name=".MainActivity"
+            android:name="com.example.ghost_notes_digital_twin.MainActivity"
             android:exported="true"
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"
