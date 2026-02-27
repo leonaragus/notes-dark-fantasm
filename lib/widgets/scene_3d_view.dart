@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
-import 'package:flutter_cube/flutter_cube.dart';
+import 'package:flutter_cube/flutter_cube.dart' as cube;
 import 'package:vector_math/vector_math_64.dart' as v;
 import '../models/room_models.dart';
 
@@ -22,9 +22,9 @@ class Scene3DView extends StatefulWidget {
 }
 
 class _Scene3DViewState extends State<Scene3DView> with SingleTickerProviderStateMixin {
-  late Scene _scene;
-  final Map<String, Object> _loadedModels = {};
-  final List<Object> _walls = [];
+  late cube.Scene _scene;
+  final Map<String, cube.Object> _loadedModels = {};
+  final List<cube.Object> _walls = [];
   late Timer _orbitTimer;
   double _orbitAngle = 0.0;
   
@@ -70,7 +70,7 @@ class _Scene3DViewState extends State<Scene3DView> with SingleTickerProviderStat
 
   FurnitureAsset? _selectedAsset;
 
-  void _onSceneCreated(Scene scene) {
+  void _onSceneCreated(cube.Scene scene) {
     _scene = scene;
     _scene.camera.position.setFrom(v.Vector3(5, 5, 5));
     _scene.camera.target.setFrom(v.Vector3(0, 0, 0));
@@ -87,7 +87,7 @@ class _Scene3DViewState extends State<Scene3DView> with SingleTickerProviderStat
 
   void _addTestScene() {
     // Pared 1 (Eje X)
-    final wall1 = Object(
+    final wall1 = cube.Object(
       fileName: 'assets/models/wall.obj',
       position: v.Vector3(-2.5, 0, 0),
       scale: v.Vector3(1.0, 1.0, 1.0),
@@ -96,7 +96,7 @@ class _Scene3DViewState extends State<Scene3DView> with SingleTickerProviderStat
     _walls.add(wall1);
 
     // Pared 2 (Eje Z, en ángulo)
-    final wall2 = Object(
+    final wall2 = cube.Object(
       fileName: 'assets/models/wall.obj',
       position: v.Vector3(0, 0, -2.5),
       rotation: v.Vector3(0, 90, 0),
@@ -106,7 +106,7 @@ class _Scene3DViewState extends State<Scene3DView> with SingleTickerProviderStat
     _walls.add(wall2);
 
     // Heladera de prueba (simulamos que tiene una Ghost Note)
-    final fridge = Object(
+    final fridge = cube.Object(
       fileName: 'assets/models/kitchenFridge.obj',
       position: v.Vector3(0, 0, 0),
       scale: v.Vector3(1.0, 1.0, 1.0),
@@ -166,14 +166,14 @@ class _Scene3DViewState extends State<Scene3DView> with SingleTickerProviderStat
   void _syncAssets() {
     // Limpiar modelos previos si existen
     _loadedModels.clear();
-    _scene.world.children.where((child) => child is Object && !_walls.contains(child) && child.fileName != 'assets/models/kitchenFridge.obj').forEach((child) {
-       _scene.world.remove(child as Object);
+    _scene.world.children.where((child) => !_walls.contains(child) && (child is! cube.Object || (child as cube.Object).fileName != 'assets/models/kitchenFridge.obj')).forEach((child) {
+       _scene.world.remove(child);
     });
 
     for (var asset in widget.assets) {
       if (asset.modelPath != null) {
         final snappedPos = _snapToGrid(asset.position);
-        final model = Object(
+        final model = cube.Object(
           fileName: asset.modelPath!,
           position: snappedPos,
           scale: v.Vector3(1.0, 1.0, 1.0),
@@ -203,13 +203,13 @@ class _Scene3DViewState extends State<Scene3DView> with SingleTickerProviderStat
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Cube(
+        cube.Cube(
           onSceneCreated: _onSceneCreated,
-          onObjectFocused: (Object? object) {
+          onObjectFocused: (cube.Object? object) {
             setState(() {
               if (object != null) {
                 final assetId = _loadedModels.entries
-                    .firstWhere((e) => e.value == object, orElse: () => const MapEntry('', Object()))
+                    .firstWhere((e) => e.value == object, orElse: () => MapEntry('', cube.Object()))
                     .key;
                 if (assetId.isNotEmpty) {
                   if (assetId != 'test_fridge') {

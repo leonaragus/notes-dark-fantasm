@@ -16,6 +16,7 @@ import '../services/wifi_signal_service.dart';
 import '../assets_registry.dart';
 import 'room_demo_screen.dart';
 import 'splash_screen.dart'; // Importar Splash para el tutorial
+import 'profile_registration_screen.dart';
 
 class EditorScreen extends StatefulWidget {
   final Room? room;

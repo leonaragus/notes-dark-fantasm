@@ -11,16 +11,7 @@ void main() {
   ));
 }
 
-class ZappDemoScreen extends StatefulWidget {
-  const ZappDemoScreen({Key? key}) : super(key: key);
-
-  @override
-  _ZappDemoScreenState createState() => _ZappDemoScreenState();
-}
-
-class _ZappDemoScreenState extends State<ZappDemoScreen> {
-  final List<DemoAsset> _demoAssets = [];
-
+class ZappDemo {
   // Simulador de Red Familiar (SSID y Rooms de otros usuarios)
   static final Map<String, List<Map<String, dynamic>>> _networkRooms = {
     'Casa_Smith_5G': [
@@ -78,6 +69,17 @@ class _ZappDemoScreenState extends State<ZappDemoScreen> {
   static Future<List<Map<String, dynamic>>> getSharedRooms(String ssid) async {
     return _networkRooms[ssid] ?? [];
   }
+}
+
+class ZappDemoScreen extends StatefulWidget {
+  const ZappDemoScreen({Key? key}) : super(key: key);
+
+  @override
+  _ZappDemoScreenState createState() => _ZappDemoScreenState();
+}
+
+class _ZappDemoScreenState extends State<ZappDemoScreen> {
+  final List<DemoAsset> _demoAssets = [];
 
   @override
   void initState() {
