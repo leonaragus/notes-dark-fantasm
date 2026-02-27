@@ -23,7 +23,6 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: 'any' # Or specify your version
           channel: 'stable'
 
       - name: Install dependencies
@@ -34,10 +33,10 @@ jobs:
 
       - name: Build APK
         run: |
-          # Create local.properties to satisfy Gradle
+          # Ensure local.properties is fully formed for Gradle
           echo "sdk.dir=$ANDROID_SDK_ROOT" > android/local.properties
           echo "flutter.sdk=$FLUTTER_ROOT" >> android/local.properties
-          flutter build apk --debug --verbose --no-pub
+          flutter build apk --debug --verbose --no-pub --stacktrace
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
