@@ -47,7 +47,7 @@ class FurnitureCatalog {
       dimensions: const AssetDimension(width: 0.4, depth: 0.6, height: 0.4),
       icon: Icons.wc,
       color: Colors.white,
-      spriteUrl: AppAssets.getAsset('baño', 'toilet'),
+      spriteUrl: AppAssets.getAsset('bano', 'toilet'),
     ),
     FurnitureAsset(
       id: 'bed_double',

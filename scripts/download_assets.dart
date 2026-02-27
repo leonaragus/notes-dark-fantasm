@@ -9,7 +9,7 @@ final Map<String, List<String>> categories = {
   'cocina': ['fridge', 'cooker', 'cabinet', 'sink', 'counter', 'kitchen_cabinet', 'kitchen_sink'],
   'living': ['sofa', 'chair', 'television', 'table', 'bookcase', 'lamp', 'rug', 'painting'],
   'dormitorio': ['bed', 'wardrobe', 'desk', 'computer', 'pillow'],
-  'baño': ['toilet', 'shower', 'bathtub', 'sink_bathroom'],
+  'bano': ['toilet', 'shower', 'bathtub', 'sink_bathroom'],
   'patio': ['tree', 'bush', 'grass', 'fence', 'bench', 'flower'],
   'pisos': ['tile', 'wood', 'carpet', 'grass_floor'],
 };
