@@ -166,7 +166,7 @@ class _Scene3DViewState extends State<Scene3DView> with SingleTickerProviderStat
   void _syncAssets() {
     // Limpiar modelos previos si existen
     _loadedModels.clear();
-    _scene.world.children.where((child) => !_walls.contains(child) && (child is! cube.Object || (child as cube.Object).fileName != 'assets/models/kitchenFridge.obj')).forEach((child) {
+    _scene.world.children.where((child) => !_walls.contains(child)).forEach((child) {
        _scene.world.remove(child);
     });
 
@@ -205,34 +205,6 @@ class _Scene3DViewState extends State<Scene3DView> with SingleTickerProviderStat
       children: [
         cube.Cube(
           onSceneCreated: _onSceneCreated,
-          onObjectFocused: (cube.Object? object) {
-            setState(() {
-              if (object != null) {
-                final assetId = _loadedModels.entries
-                    .firstWhere((e) => e.value == object, orElse: () => MapEntry('', cube.Object()))
-                    .key;
-                if (assetId.isNotEmpty) {
-                  if (assetId != 'test_fridge') {
-                    _selectedAsset = widget.assets.firstWhere((a) => a.id == assetId);
-                    widget.onAssetSelected(_selectedAsset!);
-                  } else {
-                    // Seleccionar heladera de prueba (mock)
-                    _selectedAsset = FurnitureAsset(
-                      id: 'test_fridge',
-                      name: 'Heladera (Test)',
-                      position: v.Vector3(0, 0, 0),
-                      dimensions: const AssetDimension(width: 0.7, depth: 0.7, height: 1.8),
-                      icon: Icons.kitchen,
-                      color: Colors.white,
-                      zIndex: 0,
-                    );
-                  }
-                }
-              } else {
-                _selectedAsset = null;
-              }
-            });
-          },
         ),
         // HUD - Solo el botón de añadir nota si hay un objeto seleccionado
         if (_selectedAsset != null)

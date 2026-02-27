@@ -204,7 +204,7 @@ class _Scene3DWidgetState extends State<Scene3DWidget> {
         scale: v.Vector3(0.5, 0.5, 0.5),
         name: asset.id,
       );
-      obj.mesh.color.setValues(1.0, 1.0, 1.0); // Opacidad completa
+      obj.mesh.material.diffuse.setValues(1.0, 1.0, 1.0); // Opacidad completa
       _scene.world.add(obj);
       _models[asset.id] = obj;
 
@@ -239,7 +239,7 @@ class _Scene3DWidgetState extends State<Scene3DWidget> {
           scale: scale,
           name: '${asset.id}_note',
         );
-        noteObj.mesh.color.setValues(
+        noteObj.mesh.material.diffuse.setValues(
           neonColor.red / 255,
           neonColor.green / 255,
           neonColor.blue / 255,
@@ -283,11 +283,11 @@ class _Scene3DWidgetState extends State<Scene3DWidget> {
             noteObj.rotation.y += rotation;
 
             // Brillo pulsante neón
-            final baseColor = noteObj.mesh.color;
-            noteObj.mesh.color.setValues(
-              baseColor.r * (0.8 + intensity * 0.2),
-              baseColor.g * (0.8 + intensity * 0.2),
-              baseColor.b * (0.8 + intensity * 0.2),
+            final baseColor = noteObj.mesh.material.diffuse;
+            noteObj.mesh.material.diffuse.setValues(
+              baseColor.x * (0.8 + intensity * 0.2),
+              baseColor.y * (0.8 + intensity * 0.2),
+              baseColor.z * (0.8 + intensity * 0.2),
             );
           }
         }
