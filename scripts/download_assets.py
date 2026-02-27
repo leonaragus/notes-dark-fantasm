@@ -15,7 +15,7 @@ categories = {
     'cocina': ['fridge', 'cooker', 'cabinet', 'sink', 'counter', 'kitchen_cabinet', 'kitchen_sink', 'refrigerator', 'oven', 'microwave'],
     'living': ['sofa', 'chair', 'television', 'table', 'bookcase', 'lamp', 'rug', 'painting', 'table_small', 'table_long', 'armchair', 'couch', 'tv'],
     'dormitorio': ['bed', 'wardrobe', 'desk', 'computer', 'pillow', 'bed_double', 'bed_single', 'nightstand', 'dresser'],
-    'baño': ['toilet', 'shower', 'bathtub', 'sink_bathroom', 'mirror', 'towel_rack'],
+    'bano': ['toilet', 'shower', 'bathtub', 'sink_bathroom', 'mirror', 'towel_rack'],
     'patio': ['tree', 'bush', 'grass', 'fence', 'bench', 'flower', 'tree_small', 'tree_large', 'fountain', 'pool'],
     'pisos': ['tile', 'wood', 'carpet', 'grass_floor', 'floor_wood', 'floor_tile', 'floor_carpet', 'parquet', 'ceramic'],
 }

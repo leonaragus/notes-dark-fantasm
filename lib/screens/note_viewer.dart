@@ -151,7 +151,7 @@ class _NoteViewerScreenState extends State<NoteViewerScreen> with TickerProvider
       return;
     }
 
-    final String text = "He dejado un Orbe de Memoria en mi ${_selectedAsset?.name ?? 'mueble'}. "
+    final String text = "He dejado una Ghost Note en mi ${_selectedAsset?.name ?? 'mueble'}. "
         "Ven a verlo en 'Notes Dark Fantasm'.\n\n"
         "Mensaje: ${note.content}\n"
         "Autor: ${note.authorName}";

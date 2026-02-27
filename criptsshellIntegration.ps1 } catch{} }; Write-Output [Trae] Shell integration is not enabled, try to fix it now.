@@ -1,0 +1,5 @@
+[33mf63ff27[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m Fix compilation errors in editor_screen, assets_library, and other files
+[33meed1915[m Fix: Robust local.properties creation and environment setup for Bitrise
+[33mb0158c7[m Fix: Synchronize versioning logic for CI
+[33m224894d[m Fix: Robust Bitrise environment and verbose build for debugging
+[33mbfd7e0e[m Fix: Explicit Java 17 environment and gradlew permissions for Bitrise
