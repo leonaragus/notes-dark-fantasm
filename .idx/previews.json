@@ -1,0 +1,12 @@
+
+{
+  "previews": [
+    {
+      "id": "apk-server",
+      "name": "APK Download",
+      "port": 3000,
+      "type": "web",
+      "command": ["cd", "build/app/outputs/flutter-apk/", "&&", "python3", "-m", "http.server", "3000"]
+    }
+  ]
+}
