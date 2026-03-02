@@ -10,8 +10,8 @@ class PaymentService {
   final InAppPurchase _iap = InAppPurchase.instance;
   late StreamSubscription<List<PurchaseDetails>> _subscription;
   
-  // ID del producto que crearás en la consola de Google Play
-  static const String premiumId = 'premium_subscription_2usd';
+  // --- MEJORA: ID de producto actualizado a 3 USD ---
+  static const String premiumId = 'premium_subscription_3usd';
 
   void initialize() {
     final Stream<List<PurchaseDetails>> purchaseUpdated = _iap.purchaseStream;
@@ -27,15 +27,21 @@ class PaymentService {
   Future<void> _listenToPurchaseUpdated(List<PurchaseDetails> purchaseDetailsList) async {
     for (var purchaseDetails in purchaseDetailsList) {
       if (purchaseDetails.status == PurchaseStatus.pending) {
-        // Mostrar indicador de carga
+        // La UI ahora muestra su propio indicador de carga
       } else {
         if (purchaseDetails.status == PurchaseStatus.error) {
-          // Manejar error
+          // La UI ahora muestra el error
         } else if (purchaseDetails.status == PurchaseStatus.purchased ||
                    purchaseDetails.status == PurchaseStatus.restored) {
-          // Validar compra y activar premium
+          
+          // --- VALIDACIÓN DE RECIBO (Futura Mejora) ---
+          // bool isValid = await _verifyPurchase(purchaseDetails.verificationData.serverVerificationData);
+          // if (isValid) { ... }
+
           final sub = await UserSubscription.load();
-          sub.upgradeToPremium();
+          if (!sub.isPremium) {
+            sub.upgradeToPremium();
+          }
         }
         
         if (purchaseDetails.pendingCompletePurchase) {
@@ -47,12 +53,13 @@ class PaymentService {
 
   Future<void> buyPremium() async {
     final bool available = await _iap.isAvailable();
-    if (!available) return;
+    if (!available) {
+      throw 'La tienda de aplicaciones no está disponible.';
+    }
 
     final ProductDetailsResponse response = await _iap.queryProductDetails({premiumId});
     if (response.notFoundIDs.isNotEmpty) {
-      // El ID no se encontró en la Play Store (falta configurarlo en la consola)
-      return;
+      throw 'El producto de suscripción no se encontró. Asegúrate de que esté configurado en la Play Console.';
     }
 
     final PurchaseParam purchaseParam = PurchaseParam(productDetails: response.productDetails.first);

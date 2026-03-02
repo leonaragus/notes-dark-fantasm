@@ -7,11 +7,11 @@ import 'editor_screen.dart';
 import 'splash_screen.dart';
 import 'profile_registration_screen.dart';
 import '../widgets/scene_3d_view.dart';
-
 import '../services/wifi_signal_service.dart';
 import 'package:flutter_cube/flutter_cube.dart' as cube;
 import '../models/subscription_model.dart';
 import 'subscription_screen.dart';
+import '../logic/game_rules.dart'; // <-- PASO 1: Importar las nuevas reglas
 
 class HomeGalleryScreen extends StatefulWidget {
   const HomeGalleryScreen({Key? key}) : super(key: key);
@@ -50,7 +50,6 @@ class _HomeGalleryScreenState extends State<HomeGalleryScreen> {
   Future<void> _loadSharedRooms() async {
     if (_currentSSID == null) return;
     
-    // Simulación de fetch de red familiar - Deshabilitado por ahora (Cleaned)
     setState(() {
       _sharedRooms = [];
     });
@@ -60,18 +59,15 @@ class _HomeGalleryScreenState extends State<HomeGalleryScreen> {
     if (mounted) setState(() => _isLoading = true);
     final prefs = await SharedPreferences.getInstance();
     
-    // Cargar Perfil
     final userName = prefs.getString('user_name') ?? 'Invitado';
     final userAvatar = prefs.getString('user_avatar') ?? 'person';
 
-    // Cargar Habitaciones
     final roomsJson = prefs.getString('saved_rooms_list');
     List<Room> loadedRooms = [];
     if (roomsJson != null) {
       final List<dynamic> decoded = jsonDecode(roomsJson);
       loadedRooms = decoded.map((item) => Room.fromJson(item)).toList();
     } else {
-      // Migración: Si existe la sala vieja 'saved_room_3d', convertirla
       final oldRoom = prefs.getString('saved_room_3d');
       if (oldRoom != null) {
         final data = jsonDecode(oldRoom);
@@ -88,7 +84,6 @@ class _HomeGalleryScreenState extends State<HomeGalleryScreen> {
       }
     }
 
-    // Calcular notas totales
     int notesCount = 0;
     for (var room in loadedRooms) {
       for (var asset in room.assets) {
@@ -121,7 +116,9 @@ class _HomeGalleryScreenState extends State<HomeGalleryScreen> {
 
   Future<void> _createNewRoom() async {
     final subscription = await UserSubscription.load();
-    if (!subscription.isPremium && _rooms.length >= subscription.maxRooms) {
+
+    // --- PASO 2: Usar las reglas centralizadas --- 
+    if (!GameRules.canCreateMoreRooms(subscription, _rooms.length)) {
       _showUpgradeDialog('HAS ALCANZADO EL LÍMITE DE HABITACIONES.\nACTUALIZA A PREMIUM PARA CREAR ILIMITADAS.');
       return;
     }
@@ -221,7 +218,7 @@ class _HomeGalleryScreenState extends State<HomeGalleryScreen> {
           center: Alignment.center,
           radius: 1.5,
           colors: [
-            Color(0xFF0A0015), // Púrpura muy oscuro
+            Color(0xFF0A0015),
             Colors.black,
           ],
         ),
@@ -398,7 +395,6 @@ class _HomeGalleryScreenState extends State<HomeGalleryScreen> {
                   Expanded(
                     child: Stack(
                       children: [
-                        // Vista 3D Miniaturizada
                         Container(
                           width: double.infinity,
                           decoration: BoxDecoration(
@@ -411,13 +407,12 @@ class _HomeGalleryScreenState extends State<HomeGalleryScreen> {
                           child: IgnorePointer(
                             child: Scene3DView(
                               assets: room.assets,
-                              onAssetSelected: (_) {}, // No selección en galería
+                              onAssetSelected: (_) {},
                               isInspectionMode: false,
                             ),
                           ),
                         ),
                         
-                        // Overlay de cristal
                         Container(
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
@@ -431,7 +426,6 @@ class _HomeGalleryScreenState extends State<HomeGalleryScreen> {
                           ),
                         ),
 
-                        // Indicador de Dueño (Si es compartida)
                         if (room.isShared)
                           Positioned(
                             top: 10, left: 10,
@@ -453,7 +447,6 @@ class _HomeGalleryScreenState extends State<HomeGalleryScreen> {
                             ),
                           ),
 
-                        // Pulso neón si hay mensajes sin leer
                         if (hasUnread)
                           Positioned(
                             top: 15, right: 15,

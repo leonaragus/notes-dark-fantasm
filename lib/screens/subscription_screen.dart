@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 import '../models/subscription_model.dart';
 import '../theme/cyber_theme.dart';
 import '../services/payment_service.dart';
@@ -14,59 +16,99 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
   late UserSubscription _subscription;
   bool _isLoading = true;
 
+  late StreamSubscription<List<PurchaseDetails>> _purchaseSubscription;
+
   @override
   void initState() {
     super.initState();
     _loadSubscription();
-  }
 
-  Future<void> _loadSubscription() async {
-    final sub = await UserSubscription.load();
-    setState(() {
-      _subscription = sub;
-      _isLoading = false;
+    _purchaseSubscription = InAppPurchase.instance.purchaseStream.listen((purchaseDetailsList) {
+      _handlePurchaseUpdates(purchaseDetailsList);
+    }, onDone: () {
+      _purchaseSubscription.cancel();
+    }, onError: (error) {
+      _showErrorSnackbar('Ocurrió un error en el stream de compras.');
     });
   }
 
-  Future<void> _upgrade() async {
-    setState(() => _isLoading = true);
-    
-    try {
-      // Intentamos usar el servicio de Play Store
-      final payment = PaymentService();
-      await payment.buyPremium();
-      
-      // Nota: El cambio a Premium se manejará en el stream del PaymentService
-      // pero por ahora dejamos esta simulación para que puedas probarlo sin la consola:
-      await Future.delayed(const Duration(seconds: 1));
-      _subscription.upgradeToPremium();
-      
-      if (mounted) {
-        setState(() => _isLoading = false);
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('¡BIENVENIDO AL NIVEL PREMIUM!'),
-            backgroundColor: CyberTheme.neonPurple,
-          ),
-        );
+  void _handlePurchaseUpdates(List<PurchaseDetails> purchaseDetailsList) {
+    for (var purchase in purchaseDetailsList) {
+      if (purchase.status == PurchaseStatus.purchased || purchase.status == PurchaseStatus.restored) {
+        _showSuccessSnackbar('¡Suscripción activada! Bienvenido a Premium.');
+        _loadSubscription();
+      } else if (purchase.status == PurchaseStatus.error) {
+        _showErrorSnackbar('Error durante la compra.');
       }
-    } catch (e) {
-      if (mounted) {
+    }
+    if (_isLoading) {
         setState(() => _isLoading = false);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('ERROR EN LA TIENDA: $e')),
-        );
-      }
     }
   }
 
   @override
-  Widget build(BuildContext context) {
-    if (_isLoading) {
-      return const Scaffold(
-        backgroundColor: Colors.black,
-        body: Center(child: CircularProgressIndicator(color: CyberTheme.neonPurple)),
+  void dispose() {
+    _purchaseSubscription.cancel();
+    super.dispose();
+  }
+
+  Future<void> _loadSubscription() async {
+    final sub = await UserSubscription.load();
+    if (mounted) {
+      setState(() {
+        _subscription = sub;
+        _isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _upgrade() async {
+    setState(() => _isLoading = true);
+    try {
+      await PaymentService().buyPremium();
+    } catch (e) {
+      _showErrorSnackbar('No se pudo iniciar el proceso de compra.');
+    } finally {
+      if(mounted && _isLoading) {
+          Future.delayed(const Duration(milliseconds: 500), () => setState(() => _isLoading = false));
+      }
+    }
+  }
+
+  Future<void> _restorePurchases() async {
+      setState(() => _isLoading = true);
+      try {
+        await InAppPurchase.instance.restorePurchases();
+      } catch (e) {
+        _showErrorSnackbar('Error al intentar restaurar las compras.');
+      } finally {
+          if(mounted && _isLoading) {
+            Future.delayed(const Duration(milliseconds: 500), () => setState(() => _isLoading = false));
+        }
+      }
+  }
+
+  void _showErrorSnackbar(String message) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(message), backgroundColor: Colors.redAccent),
       );
+  }
+
+  void _showSuccessSnackbar(String message) {
+      if (!mounted) return;
+       ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(message), backgroundColor: CyberTheme.neonPurple),
+      );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_isLoading && !this.mounted) {
+        return const Scaffold(
+            backgroundColor: Colors.black,
+            body: Center(child: CircularProgressIndicator(color: CyberTheme.neonPurple)),
+        );
     }
 
     return Scaffold(
@@ -76,42 +118,60 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
         elevation: 0,
         title: const Text('UPGRADE SYSTEM', style: TextStyle(fontFamily: 'Orbitron', letterSpacing: 2)),
         centerTitle: true,
+        actions: [
+          TextButton(
+            onPressed: _restorePurchases,
+            child: const Text('Restaurar', style: TextStyle(color: Colors.white70)),
+          )
+        ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          children: [
-            _buildCurrentPlanCard(),
-            const SizedBox(height: 30),
-            _buildPlanOption(
-              title: 'FREE',
-              price: 'GRATIS',
-              color: CyberTheme.neonCyan,
-              features: [
-                '1 Habitación',
-                '4 Objetos base',
-                'Desbloquea objetos con anuncios',
-                'Anuncios al crear notas',
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              children: [
+                _buildCurrentPlanCard(),
+                const SizedBox(height: 30),
+                // --- MEJORA: Textos del plan gratuito actualizados ---
+                _buildPlanOption(
+                  title: 'FREE',
+                  price: 'GRATIS',
+                  color: CyberTheme.neonCyan,
+                  features: [
+                    'Ver todo el inventario de objetos',
+                    'Coloca hasta 4 objetos por escena',
+                    'Crea tus 2 primeros mensajes sin anuncios',
+                    'Requiere un anuncio para cada nuevo mensaje',
+                  ],
+                  isCurrent: !_subscription.isPremium,
+                ),
+                const SizedBox(height: 20),
+                // --- MEJORA: Precio y textos del plan premium actualizados ---
+                _buildPlanOption(
+                  title: 'PREMIUM',
+                  price: '\$3 / MES',
+                  color: CyberTheme.neonPurple,
+                  features: [
+                    'Habitaciones y objetos ilimitados',
+                    'SIN ANUNCIOS',
+                    'Botón de compartir (IG, TikTok, WA)',
+                    'Soporte prioritario',
+                  ],
+                  isCurrent: _subscription.isPremium,
+                  onTap: _subscription.isPremium ? null : _upgrade,
+                ),
               ],
-              isCurrent: !_subscription.isPremium,
             ),
-            const SizedBox(height: 20),
-            _buildPlanOption(
-              title: 'PREMIUM',
-              price: '\$2 / MES',
-              color: CyberTheme.neonPurple,
-              features: [
-                'Habitaciones ilimitadas',
-                'Objetos ilimitados',
-                'SIN ANUNCIOS',
-                'Botón de compartir (IG, TikTok, WA)',
-                'Soporte prioritario',
-              ],
-              isCurrent: _subscription.isPremium,
-              onTap: _subscription.isPremium ? null : _upgrade,
+          ),
+          if (_isLoading)
+            Container(
+              color: Colors.black.withOpacity(0.7),
+              child: const Center(
+                child: CircularProgressIndicator(color: CyberTheme.neonPurple),
+              ),
             ),
-          ],
-        ),
+        ],
       ),
     );
   }
@@ -147,12 +207,12 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
           if (!_subscription.isPremium) ...[
             const SizedBox(height: 15),
             Text(
-              'Objetos: ${_subscription.baseObjects + _subscription.unlockedObjectsCount}',
+              'Objetos colocados: 0/4', // Esto es un ejemplo, la lógica real está en el editor
               style: const TextStyle(color: Colors.white, fontSize: 16),
             ),
             const SizedBox(height: 5),
             Text(
-              'Anuncios para próximo objeto: ${_subscription.adsWatchedForUnlock}/3',
+              'Mensajes sin anuncios creados: ${_subscription.notesCreatedCount}/2',
               style: const TextStyle(color: Colors.white54, fontSize: 12),
             ),
           ],
@@ -231,4 +291,3 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
     );
   }
 }
-

@@ -1,9 +1,24 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'home_gallery_screen.dart';
-import 'profile_registration_screen.dart'; // Importar registro de perfil
+import 'profile_registration_screen.dart';
 import 'dart:ui' as ui;
+import 'package:audioplayers/audioplayers.dart'; // <-- AÑADIDO: para reproducir sonidos
+
+// --- MEJORA: Textos externalizados para fácil mantenimiento ---
+class _TutorialStrings {
+  static const String designTitle = "DISEÑO";
+  static const String designSubtitle = "Crea la maqueta digital de tu casa";
+  static const String syncTitle = "SINCRONIZACIÓN";
+  static const String syncSubtitle = "Sincroniza el 3D con tu cámara";
+  static const String resultTitle = "RESULTADO";
+  static const String resultSubtitle = "Mensajes neón que flotan en tu espacio";
+  static const String welcomeTitle = "TU CASA AHORA TIENE MEMORIA";
+  static const String welcomeSubtitle = "Bienvenido al Espejo Virtual";
+}
+
 
 class SplashScreen extends StatefulWidget {
   final bool forceTutorial;
@@ -15,9 +30,11 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMixin {
   late AnimationController _logoController;
-  late AnimationController _tutorialController;
+  late AnimationController _particleController; // MEJORA: Controlador para partículas
+  late AudioPlayer _audioPlayer; // <-- AÑADIDO: reproductor de audio
   
   int _currentAct = 0; // 0: Logo, 1: Diseño, 2: Sincronización, 3: Resultado, 4: Welcome
+  bool _tutorialSkipped = false;
 
   @override
   void initState() {
@@ -27,12 +44,16 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
       duration: const Duration(milliseconds: 1500),
     );
 
-    _tutorialController = AnimationController(
+    _particleController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 6),
-    );
+      duration: const Duration(seconds: 20),
+    )..repeat();
 
-    _checkFirstOpen();
+    _audioPlayer = AudioPlayer(); // <-- AÑADIDO: inicializar el reproductor
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkFirstOpen();
+    });
   }
 
   Future<void> _checkFirstOpen() async {
@@ -52,23 +73,34 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
   void _startTutorial() {
     _logoController.forward().then((_) {
       Future.delayed(const Duration(seconds: 1), () {
+        if (!mounted) return;
         _runTutorialActs();
       });
     });
   }
-
+  
   void _startFastPath() {
     _logoController.forward().then((_) {
-      Future.delayed(const Duration(seconds: 1), () => _nextStep());
+      Future.delayed(const Duration(seconds: 1), () => _skipTutorial());
     });
   }
 
   void _runTutorialActs() async {
     for (int i = 1; i <= 4; i++) {
-      if (!mounted) return;
+      if (!mounted || _tutorialSkipped) return;
       setState(() => _currentAct = i);
-      await Future.delayed(const Duration(milliseconds: 1500));
+      await Future.delayed(const Duration(milliseconds: 1200)); 
     }
+    if (!_tutorialSkipped) {
+      _nextStep();
+    }
+  }
+  
+  void _skipTutorial() {
+    if (_tutorialSkipped) return;
+    setState(() {
+      _tutorialSkipped = true;
+    });
     _nextStep();
   }
 
@@ -78,33 +110,24 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
 
     if (!mounted) return;
 
-    if (profileCompleted) {
-      Navigator.of(context).pushReplacement(
-        PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) => const HomeGalleryScreen(),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            return FadeTransition(opacity: animation, child: child);
-          },
-          transitionDuration: const Duration(milliseconds: 800),
-        ),
-      );
-    } else {
-      Navigator.of(context).pushReplacement(
-        PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) => const ProfileRegistrationScreen(),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            return FadeTransition(opacity: animation, child: child);
-          },
-          transitionDuration: const Duration(milliseconds: 800),
-        ),
-      );
-    }
+    final targetScreen = profileCompleted ? const HomeGalleryScreen() : const ProfileRegistrationScreen();
+
+    Navigator.of(context).pushReplacement(
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => targetScreen,
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(opacity: animation, child: child);
+        },
+        transitionDuration: const Duration(milliseconds: 800),
+      ),
+    );
   }
 
   @override
   void dispose() {
     _logoController.dispose();
-    _tutorialController.dispose();
+    _particleController.dispose();
+    _audioPlayer.dispose(); // <-- AÑADIDO: liberar el reproductor de audio
     super.dispose();
   }
 
@@ -114,14 +137,28 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
       backgroundColor: Colors.black,
       body: Stack(
         children: [
-          // Fondo de partículas sutiles
-          const Positioned.fill(child: _BackgroundParticles()),
+          Positioned.fill(child: _BackgroundParticles(controller: _particleController)),
           
           Center(
             child: _currentAct == 0 
               ? _buildLogo()
               : _buildTutorialContent(),
           ),
+
+          if (_currentAct > 0 && _currentAct <= 4 && !_tutorialSkipped)
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 40.0),
+                child: TextButton(
+                  onPressed: _skipTutorial,
+                  child: const Text(
+                    'Saltar',
+                    style: TextStyle(color: Colors.white70, fontSize: 16),
+                  ),
+                ),
+              ),
+            ),
         ],
       ),
     );
@@ -164,7 +201,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
 
   Widget _buildActVisual() {
     switch (_currentAct) {
-      case 1: // Diseño
+      case 1:
         return _TutorialActWrapper(
           child: Stack(
             alignment: Alignment.center,
@@ -178,7 +215,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
             ],
           ),
         );
-      case 2: // Sincronización
+      case 2:
         return _TutorialActWrapper(
           child: Stack(
             alignment: Alignment.center,
@@ -189,7 +226,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
             ],
           ),
         );
-      case 3: // Resultado
+      case 3:
         return _TutorialActWrapper(
           child: Stack(
             alignment: Alignment.center,
@@ -206,7 +243,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
             ],
           ),
         );
-      case 4: // Welcome
+      case 4:
         return const Icon(Icons.check_circle_outline, color: Colors.cyanAccent, size: 100);
       default:
         return const SizedBox();
@@ -219,21 +256,21 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
     
     switch (_currentAct) {
       case 1:
-        title = "DISEÑO";
-        subtitle = "Crea la maqueta digital de tu casa";
+        title = _TutorialStrings.designTitle;
+        subtitle = _TutorialStrings.designSubtitle;
         break;
       case 2:
-        title = "SINCRONIZACIÓN";
-        subtitle = "Sincroniza el 3D con tu cámara";
+        title = _TutorialStrings.syncTitle;
+        subtitle = _TutorialStrings.syncSubtitle;
         break;
       case 3:
-        title = "RESULTADO";
-        subtitle = "Mensajes neón que flotan en tu espacio";
-        _playEnergySound(); // Simular sonido de energía en el resultado final
+        title = _TutorialStrings.resultTitle;
+        subtitle = _TutorialStrings.resultSubtitle;
+        _playEnergySound();
         break;
       case 4:
-        title = "TU CASA AHORA TIENE MEMORIA";
-        subtitle = "Bienvenido al Espejo Virtual";
+        title = _TutorialStrings.welcomeTitle;
+        subtitle = _TutorialStrings.welcomeSubtitle;
         break;
     }
 
@@ -251,9 +288,12 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
   }
 
   void _playEnergySound() {
-    // Simulación de sonido de energía (Haptic feedback en ausencia de audio assets)
-    // En una app real, aquí se usaría audioplayers para reproducir el asset de sonido.
-    debugPrint("AUDIO: Energía activándose...");
+    // <-- MEJORA: ahora reproduce un sonido real
+    try {
+      _audioPlayer.play(AssetSource('sounds/energy_sound.wav'));
+    } catch (e) {
+      debugPrint("Error al reproducir el sonido: $e");
+    }
   }
 }
 
@@ -281,26 +321,65 @@ class _TutorialActWrapper extends StatelessWidget {
   }
 }
 
-class _BackgroundParticles extends StatelessWidget {
-  const _BackgroundParticles();
+class _BackgroundParticles extends StatefulWidget {
+  final AnimationController controller;
+  const _BackgroundParticles({required this.controller});
 
   @override
-  Widget build(BuildContext context) {
-    return CustomPaint(
-      painter: _ParticlePainter(),
-    );
-  }
+  __BackgroundParticlesState createState() => __BackgroundParticlesState();
+}
+
+class __BackgroundParticlesState extends State<_BackgroundParticles> {
+    @override
+    Widget build(BuildContext context) {
+      return AnimatedBuilder(
+        animation: widget.controller,
+        builder: (context, child) {
+          return CustomPaint(
+            painter: _ParticlePainter(widget.controller.value),
+          );
+        },
+      );
+    }
+}
+
+class _Particle {
+  final double x, y, radius, initialPhase;
+  _Particle({required this.x, required this.y, required this.radius, required this.initialPhase});
 }
 
 class _ParticlePainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()..color = Colors.cyanAccent.withOpacity(0.05);
-    // Dibujo estático para el demo, se puede animar
-    for (var i = 0; i < 20; i++) {
-      canvas.drawCircle(Offset(size.width * (i/20), size.height * (i/20)), 2, paint);
+  final double animationValue;
+  final List<_Particle> _particles;
+  final Random _random = Random(12345);
+
+  _ParticlePainter(this.animationValue) : _particles = [] {
+    for (var i = 0; i < 40; i++) {
+        final x = _random.nextDouble();
+        final y = _random.nextDouble();
+        final radius = _random.nextDouble() * 2 + 1;
+        final initialPhase = _random.nextDouble() * pi * 2;
+        _particles.add(_Particle(x: x, y: y, radius: radius, initialPhase: initialPhase));
     }
   }
+  
   @override
-  bool shouldRepaint(CustomPainter oldDelegate) => false;
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()..color = Colors.cyanAccent.withOpacity(0.08);
+
+    for (final particle in _particles) {
+      final currentX = particle.x * size.width;
+      final currentY = particle.y * size.height;
+      
+      final offsetX = cos(animationValue * 2 * pi + particle.initialPhase) * 10;
+      final offsetY = sin(animationValue * 2 * pi + particle.initialPhase) * 10;
+      
+      canvas.drawCircle(Offset(currentX + offsetX, currentY + offsetY), particle.radius, paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _ParticlePainter oldDelegate) {
+    return oldDelegate.animationValue != animationValue;
+  }
 }

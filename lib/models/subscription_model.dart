@@ -1,38 +1,34 @@
-import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../logic/game_rules.dart';
 
 enum PlanType { free, premium }
 
 class UserSubscription {
   PlanType plan;
-  int adsWatchedForUnlock;
-  int unlockedObjectsCount;
+  int notesCreatedCount;
+  int adsWatchedForUnlock; // <-- CAMPO RESTAURADO
   int totalAdsWatched;
 
   UserSubscription({
     this.plan = PlanType.free,
-    this.adsWatchedForUnlock = 0,
-    this.unlockedObjectsCount = 0,
+    this.notesCreatedCount = 0,
+    this.adsWatchedForUnlock = 0, // <-- CAMPO RESTAURADO
     this.totalAdsWatched = 0,
   });
 
   bool get isPremium => plan == PlanType.premium;
 
-  // Límites del plan gratuito
-  int get maxRooms => isPremium ? 999 : 1;
-  int get baseObjects => 4;
-  int get maxObjects => isPremium ? 999 : (baseObjects + unlockedObjectsCount);
-
+  // Claves para SharedPreferences
   static const String _keyPlan = 'user_plan';
-  static const String _keyAdsUnlock = 'ads_watched_unlock';
-  static const String _keyUnlockedCount = 'unlocked_objects_count';
+  static const String _keyNotesCount = 'notes_created_count';
+  static const String _keyAdsForUnlock = 'ads_watched_for_unlock'; // <-- CAMPO RESTAURADO
   static const String _keyTotalAds = 'total_ads_watched';
 
   Future<void> save() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_keyPlan, plan.name);
-    await prefs.setInt(_keyAdsUnlock, adsWatchedForUnlock);
-    await prefs.setInt(_keyUnlockedCount, unlockedObjectsCount);
+    await prefs.setInt(_keyNotesCount, notesCreatedCount);
+    await prefs.setInt(_keyAdsForUnlock, adsWatchedForUnlock); // <-- CAMPO RESTAURADO
     await prefs.setInt(_keyTotalAds, totalAdsWatched);
   }
 
@@ -43,29 +39,41 @@ class UserSubscription {
     
     return UserSubscription(
       plan: plan,
-      adsWatchedForUnlock: prefs.getInt(_keyAdsUnlock) ?? 0,
-      unlockedObjectsCount: prefs.getInt(_keyUnlockedCount) ?? 0,
+      notesCreatedCount: prefs.getInt(_keyNotesCount) ?? 0,
+      adsWatchedForUnlock: prefs.getInt(_keyAdsForUnlock) ?? 0, // <-- CAMPO RESTAURADO
       totalAdsWatched: prefs.getInt(_keyTotalAds) ?? 0,
     );
   }
 
-  // Lógica de anuncios
-  void watchAdForNote() {
+  void recordNoteCreation() {
+    if (!isPremium) {
+      notesCreatedCount++;
+      save();
+    }
+  }
+  
+  void recordAdWatchedForNote() {
+    // Reinicia el contador de notas para que las próximas N sean gratis de nuevo.
+    notesCreatedCount = 0;
     totalAdsWatched++;
     save();
   }
 
+  // --- MÉTODO RESTAURADO Y MEJORADO ---
+  /// Registra que se ha visto un anuncio para desbloquear un objeto.
+  /// Devuelve `true` si se ha alcanzado el número de anuncios necesarios.
   bool watchAdForUnlock() {
-    adsWatchedForUnlock++;
     totalAdsWatched++;
-    if (adsWatchedForUnlock >= 3) {
-      adsWatchedForUnlock = 0;
-      unlockedObjectsCount++;
+    adsWatchedForUnlock++;
+
+    if (adsWatchedForUnlock >= GameRules.adsRequiredForObjectUnlock) {
+      adsWatchedForUnlock = 0; // Reiniciar para el próximo desbloqueo
       save();
-      return true; // Desbloqueó un nuevo objeto
+      return true; // ¡Desbloqueado!
+    } else {
+      save();
+      return false; // Aún no es suficiente
     }
-    save();
-    return false;
   }
 
   void upgradeToPremium() {
